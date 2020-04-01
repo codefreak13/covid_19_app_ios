@@ -5,14 +5,119 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Arrow from '../assets/whiteArrow.svg';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
+import ShowMessage, {type} from '../toster/ShowMessage';
 
 class Location extends React.Component {
-  state = {sliderValue: 75};
+  state = {
+    sliderValue: 75,
+    loading1: false,
+    loading2: false,
+    loading3: false,
+    loading4: false,
+  };
 
   static navigationOptions = {headerShown: false};
+
+  handleSubmit1 = async () => {
+    const token = await AsyncStorage.getItem('token');
+    this.setState({loading1: true});
+    try {
+      await firestore()
+        .collection('users')
+        .doc(token)
+        .update({
+          'location.details':
+            'I’m at home. I haven’t been to the hospital for suspected COVID-19 symptoms',
+          'location.location': 'At home',
+          updated_at: new Date(),
+        });
+      this.setState({loading1: false});
+      this.props.navigation.navigate('Final');
+    } catch (e) {
+      this.setState({loading1: false});
+      let err = e.message.split(' ');
+      err.shift();
+      ShowMessage(type.ERROR, err.join(' '));
+      console.log(err.join(' '));
+    }
+  };
+
+  handleSubmit2 = async () => {
+    const token = await AsyncStorage.getItem('token');
+    this.setState({loading2: true});
+    try {
+      await firestore()
+        .collection('users')
+        .doc(token)
+        .update({
+          'location.details':
+            'I am at the hospital with suspected COVID-19 symptoms.',
+          'location.location': 'At the hospital',
+          updated_at: new Date(),
+        });
+      this.setState({loading2: false});
+      this.props.navigation.navigate('Treatment');
+    } catch (e) {
+      this.setState({loading2: false});
+      let err = e.message.split(' ');
+      err.shift();
+      ShowMessage(type.ERROR, err.join(' '));
+      console.log(err.join(' '));
+    }
+  };
+
+  handleSubmit3 = async () => {
+    const token = await AsyncStorage.getItem('token');
+    this.setState({loading3: true});
+    try {
+      await firestore()
+        .collection('users')
+        .doc(token)
+        .update({
+          'location.details':
+            'I’m back from the hospital, I’d like to tell you about my treatment',
+          'location.location': 'Back from hospital',
+          updated_at: new Date(),
+        });
+      this.setState({loading3: false});
+      this.props.navigation.navigate('Treatment');
+    } catch (e) {
+      this.setState({loading3: false});
+      let err = e.message.split(' ');
+      err.shift();
+      ShowMessage(type.ERROR, err.join(' '));
+      console.log(err.join(' '));
+    }
+  };
+
+  handleSubmit4 = async () => {
+    const token = await AsyncStorage.getItem('token');
+    this.setState({loading4: true});
+    try {
+      await firestore()
+        .collection('users')
+        .doc(token)
+        .update({
+          'location.details': 'I’ve already told you about my treatment',
+          'location.location': 'Back from hospital',
+          updated_at: new Date(),
+        });
+      this.setState({loading4: false});
+      this.props.navigation.navigate('Final');
+    } catch (e) {
+      this.setState({loading4: false});
+      let err = e.message.split(' ');
+      err.shift();
+      ShowMessage(type.ERROR, err.join(' '));
+      console.log(err.join(' '));
+    }
+  };
 
   render() {
     return (
@@ -38,22 +143,30 @@ class Location extends React.Component {
                 I’m at home. I haven’t been to the hospital for suspected
                 COVID-19 symptoms.
               </Text>
-              <TouchableNativeFeedback>
-                <View style={styles.signupbox}>
-                  <Arrow height={7} width={11} />
-                </View>
-              </TouchableNativeFeedback>
+              {this.state.loading1 ? (
+                <ActivityIndicator color="#564FF5" />
+              ) : (
+                <TouchableNativeFeedback onPress={this.handleSubmit1}>
+                  <View style={styles.signupbox}>
+                    <Arrow height={7} width={11} />
+                  </View>
+                </TouchableNativeFeedback>
+              )}
             </View>
             <View style={styles.card}>
               <Text style={styles.cardTitle}>At the hospital</Text>
               <Text style={styles.cardBody}>
                 I am at the hospital with suspected COVID-19 symptoms.
               </Text>
-              <TouchableNativeFeedback>
-                <View style={styles.signupbox}>
-                  <Arrow height={7} width={11} />
-                </View>
-              </TouchableNativeFeedback>
+              {this.state.loading2 ? (
+                <ActivityIndicator color="#564FF5" />
+              ) : (
+                <TouchableNativeFeedback onPress={this.handleSubmit2}>
+                  <View style={styles.signupbox}>
+                    <Arrow height={7} width={11} />
+                  </View>
+                </TouchableNativeFeedback>
+              )}
             </View>
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Back from hospital</Text>
@@ -61,22 +174,30 @@ class Location extends React.Component {
                 I’m back from the hospital, I’d like to tell you about my
                 treatment
               </Text>
-              <TouchableNativeFeedback>
-                <View style={styles.signupbox}>
-                  <Arrow height={7} width={11} />
-                </View>
-              </TouchableNativeFeedback>
+              {this.state.loading3 ? (
+                <ActivityIndicator color="#564FF5" />
+              ) : (
+                <TouchableNativeFeedback onPress={this.handleSubmit3}>
+                  <View style={styles.signupbox}>
+                    <Arrow height={7} width={11} />
+                  </View>
+                </TouchableNativeFeedback>
+              )}
             </View>
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Back from hospital</Text>
               <Text style={styles.cardBody}>
                 I’ve already told you about my treatment
               </Text>
-              <TouchableNativeFeedback>
-                <View style={styles.signupbox}>
-                  <Arrow height={7} width={11} />
-                </View>
-              </TouchableNativeFeedback>
+              {this.state.loading4 ? (
+                <ActivityIndicator color="#564FF5" />
+              ) : (
+                <TouchableNativeFeedback onPress={this.handleSubmit4}>
+                  <View style={styles.signupbox}>
+                    <Arrow height={7} width={11} />
+                  </View>
+                </TouchableNativeFeedback>
+              )}
             </View>
           </View>
         </View>
@@ -107,7 +228,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   slider: {
-    width: '100%',
+    width: '110%',
   },
   signupbox: {
     backgroundColor: '#564FF5',

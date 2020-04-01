@@ -3,19 +3,22 @@ import {
   View,
   Text,
   StyleSheet,
-  Picker,
   ScrollView,
   KeyboardAvoidingView,
   TouchableNativeFeedback,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {Formik} from 'formik';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
+import ShowMessage, {type} from '../toster/ShowMessage';
 
 class Treatment extends React.Component {
   state = {
-    optional: '',
     sliderValue: 100,
+    loading: false,
   };
 
   static navigationOptions = {headerShown: false};
@@ -26,10 +29,26 @@ class Treatment extends React.Component {
         initialValues={{
           optional: '',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          const token = await AsyncStorage.getItem('token');
+          this.setState({loading: true});
+          try {
+            await firestore()
+              .collection('users')
+              .doc(token)
+              .update({
+                'treatments.other': values.optional,
+                updated_at: new Date(),
+              });
+            this.setState({loading: false});
+            this.props.navigation.navigate('Final');
+          } catch (e) {
+            this.setState({loading: false});
+            let err = e.message.split(' ');
+            err.shift();
+            ShowMessage(type.ERROR, err.join(' '));
+            console.log(err.join(' '));
+          }
         }}>
         {({
           values,
@@ -81,7 +100,11 @@ class Treatment extends React.Component {
                 </View>
                 <TouchableNativeFeedback onPress={handleSubmit}>
                   <View style={styles.signupbox}>
-                    <Text style={styles.signuptext}>Done</Text>
+                    {this.state.loading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={styles.signuptext}>Done</Text>
+                    )}
                   </View>
                 </TouchableNativeFeedback>
               </View>

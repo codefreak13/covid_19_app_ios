@@ -32,12 +32,14 @@ class Final extends React.Component {
             <Text style={styles.signuptext}>Share app</Text>
           </View>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          onPress={() => this.props.navigation.navigate('TalkToADoctor')}>
           <View style={styles.signupbox1}>
             <Text style={styles.signuptext1}>Talk to a doctor</Text>
           </View>
         </TouchableNativeFeedback>
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => this.props.navigation.navigate('ReturningScreen')}>
           <View style={styles.done}>
             <Text style={styles.signuptext1}>Done</Text>
           </View>
