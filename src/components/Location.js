@@ -4,18 +4,19 @@ import {
   Text,
   StyleSheet,
   Picker,
-  ScrollView,
-  KeyboardAvoidingView,
   TouchableNativeFeedback,
-  TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {Formik} from 'formik';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
+import ShowMessage, {type} from '../toster/ShowMessage';
 
 class Location extends React.Component {
   state = {
-    risk: '',
     sliderValue: 66,
+    loading: false,
   };
 
   static navigationOptions = {headerShown: false};
@@ -24,12 +25,30 @@ class Location extends React.Component {
     return (
       <Formik
         initialValues={{
-          risk: '',
+          risk: 'No',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          const token = await AsyncStorage.getItem('token');
+          this.setState({loading: true});
+
+          try {
+            await firestore()
+              .collection('users')
+              .doc(token)
+              .update({
+                'location.is_a_returning_traveller_from_a_high_risk_COVID19_country':
+                  values.risk,
+                updated_at: new Date(),
+              });
+            this.setState({loading: false});
+            this.props.navigation.navigate('Location2');
+          } catch (e) {
+            this.setState({loading: false});
+            let err = e.message.split(' ');
+            err.shift();
+            ShowMessage(type.ERROR, err.join(' '));
+            console.log(err.join(' '));
+          }
         }}>
         {({
           values,
@@ -57,11 +76,10 @@ class Location extends React.Component {
             <View style={styles.section}>
               <Text style={styles.sectionText}>
                 Are you a returning traveller from any of the COVID-19 high risk
-                countries?{' '}
+                countries?
               </Text>
               <View style={styles.picker}>
                 <Picker
-                  onChangeText={handleChange('risk')}
                   selectedValue={values.risk}
                   onBlur={handleBlur('risk')}
                   onValueChange={(itemValue, itemIndex) =>
@@ -72,11 +90,15 @@ class Location extends React.Component {
                 </Picker>
               </View>
             </View>
-            {/* <TouchableNativeFeedback onPress={handleSubmit}>
-                  <View style={styles.signupbox}>
-                    <Text style={styles.signuptext}>Next</Text>
-                  </View>
-                </TouchableNativeFeedback> */}
+            <TouchableNativeFeedback onPress={handleSubmit}>
+              <View style={styles.signupbox}>
+                {this.state.loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.signuptext}>Next</Text>
+                )}
+              </View>
+            </TouchableNativeFeedback>
           </View>
         )}
       </Formik>
@@ -106,7 +128,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 19,
   },
   slider: {
-    width: '100%',
+    width: '110%',
   },
   picker: {
     width: '100%',
@@ -129,5 +151,25 @@ const styles = StyleSheet.create({
     fontFamily: 'SF Pro Display',
     fontStyle: 'normal',
     fontWeight: '500',
+    width: '80%',
+  },
+  signupbox: {
+    backgroundColor: '#564FF5',
+    height: 48,
+    width: '100%',
+    alignSelf: 'center',
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 38,
+  },
+  signuptext: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 15,
+    fontFamily: 'SF Pro Display',
+    alignSelf: 'center',
+    lineHeight: 18,
+    fontStyle: 'normal',
   },
 });

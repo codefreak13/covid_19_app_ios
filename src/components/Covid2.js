@@ -7,15 +7,18 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableNativeFeedback,
-  TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {Formik} from 'formik';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
+import ShowMessage, {type} from '../toster/ShowMessage';
 
 class Symptoms extends React.Component {
   state = {
-    covid: '',
     sliderValue: 50,
+    loading: false,
   };
 
   static navigationOptions = {headerShown: false};
@@ -24,12 +27,30 @@ class Symptoms extends React.Component {
     return (
       <Formik
         initialValues={{
-          covid: '',
+          test: 'Yes',
+          covid: 'No',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          const token = await AsyncStorage.getItem('token');
+          this.setState({loading: true});
+
+          try {
+            await firestore()
+              .collection('users')
+              .doc(token)
+              .update({
+                'covid19_status.is_tested_positive': values.covid,
+                updated_at: new Date(),
+              });
+            this.setState({loading: false});
+            this.props.navigation.navigate('Symptoms');
+          } catch (e) {
+            this.setState({loading: false});
+            let err = e.message.split(' ');
+            err.shift();
+            ShowMessage(type.ERROR, err.join(' '));
+            console.log(err.join(' '));
+          }
         }}>
         {({
           values,
@@ -60,41 +81,44 @@ class Symptoms extends React.Component {
                 />
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
-                    Have you been tested for COVID-19?{' '}
+                    Have you been tested for COVID-19?
                   </Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('covid')}
-                      selectedValue={values.covid}
-                      onBlur={handleBlur('covid')}
+                      enabled={false}
+                      selectedValue={values.test}
+                      onBlur={handleBlur('test')}
                       onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('covid', itemValue)
+                        setFieldValue('test', itemValue)
                       }>
-                      <Picker.Item label="Yes" value="No" color="#979797" />
-                      <Picker.Item label="No" value="Yes" color="#979797" />
+                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#979797" />
                     </Picker>
                   </View>
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
-                    Did you test positive for COVID-19{' '}
+                    Did you test positive for COVID-19
                   </Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('covid')}
                       selectedValue={values.covid}
                       onBlur={handleBlur('covid')}
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('covid', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
                       <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#979797" />
                     </Picker>
                   </View>
                 </View>
                 <TouchableNativeFeedback onPress={handleSubmit}>
                   <View style={styles.signupbox}>
-                    <Text style={styles.signuptext}>Next</Text>
+                    {this.state.loading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={styles.signuptext}>Next</Text>
+                    )}
                   </View>
                 </TouchableNativeFeedback>
               </View>
@@ -128,7 +152,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   slider: {
-    width: '100%',
+    width: '110%',
   },
   picker: {
     width: '100%',

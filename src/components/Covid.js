@@ -7,16 +7,18 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableNativeFeedback,
-  TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {Formik} from 'formik';
+import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
+import ShowMessage, {type} from '../toster/ShowMessage';
 
-class Symptoms extends React.Component {
+class Covid extends React.Component {
   state = {
-    covid: '',
     sliderValue: 50,
+    loading: false,
   };
 
   static navigationOptions = {headerShown: false};
@@ -25,11 +27,50 @@ class Symptoms extends React.Component {
     return (
       <Formik
         initialValues={{
-          covid: '',
+          covid: 'No',
         }}
         onSubmit={async values => {
-          // await AsyncStorage.clear();
-          // this.props.navigation.navigate('Register');
+          const token = await AsyncStorage.getItem('token');
+          this.setState({loading: true});
+          if (values.covid == 'No') {
+            try {
+              await firestore()
+                .collection('users')
+                .doc(token)
+                .update({
+                  covid19_status: {
+                    has_been_tested_for_COVID19: values.covid,
+                  },
+                  updated_at: new Date(),
+                });
+              this.setState({loading: false});
+              this.props.navigation.navigate('Feelings');
+            } catch (e) {
+              this.setState({loading: false});
+              let err = e.message.split(' ');
+              err.shift();
+              ShowMessage(type.ERROR, err.join(' '));
+              console.log(err.join(' '));
+            }
+          } else {
+            try {
+              await firestore()
+                .collection('users')
+                .doc(token)
+                .update({
+                  'covid19_status.has_been_tested_for_COVID19': values.covid,
+                  updated_at: new Date(),
+                });
+              this.setState({loading: false});
+              this.props.navigation.navigate('Covid2');
+            } catch (e) {
+              this.setState({loading: false});
+              let err = e.message.split(' ');
+              err.shift();
+              ShowMessage(type.ERROR, err.join(' '));
+              console.log(err.join(' '));
+            }
+          }
         }}>
         {({
           values,
@@ -60,7 +101,7 @@ class Symptoms extends React.Component {
                 />
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
-                    Have you been tested for COVID-19?{' '}
+                    Have you been tested for COVID-19?
                   </Text>
                   <View style={styles.picker}>
                     <Picker
@@ -77,7 +118,11 @@ class Symptoms extends React.Component {
                 </View>
                 <TouchableNativeFeedback onPress={handleSubmit}>
                   <View style={styles.signupbox}>
-                    <Text style={styles.signuptext}>Next</Text>
+                    {this.state.loading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={styles.signuptext}>Next</Text>
+                    )}
                   </View>
                 </TouchableNativeFeedback>
               </View>
@@ -89,7 +134,7 @@ class Symptoms extends React.Component {
   }
 }
 
-export default Symptoms;
+export default Covid;
 
 const styles = StyleSheet.create({
   main: {
@@ -111,7 +156,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   slider: {
-    width: '100%',
+    width: '110%',
   },
   picker: {
     width: '100%',

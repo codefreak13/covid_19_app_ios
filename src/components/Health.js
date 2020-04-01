@@ -17,18 +17,6 @@ import ShowMessage, {type} from '../toster/ShowMessage';
 
 class Health extends React.Component {
   state = {
-    daily: '',
-    heart: '',
-    diabetes: '',
-    asthma: '',
-    smoker: '',
-    cancer: '',
-    suppresant: '',
-    ibuprofen: '',
-    pril: '',
-    covid: '',
-    cough: '',
-    home: '',
     sliderValue: 43,
     loading: false,
   };
@@ -39,18 +27,18 @@ class Health extends React.Component {
     return (
       <Formik
         initialValues={{
-          daily: '',
-          heart: '',
-          diabetes: '',
-          asthma: '',
-          smoker: '',
-          cancer: '',
-          suppresant: '',
-          ibuprofen: '',
-          pril: '',
-          covid: '',
-          cough: '',
-          home: '',
+          daily: 'No',
+          heart: 'No',
+          diabetes: 'No',
+          asthma: 'No',
+          smoker: 'No',
+          cancer: 'No',
+          suppresant: 'No',
+          ibuprofen: 'No',
+          pril: 'No',
+          covid: 'No',
+          cough: 'No',
+          home: 'No',
         }}
         onSubmit={async values => {
           const token = await AsyncStorage.getItem('token');
@@ -65,6 +53,7 @@ class Health extends React.Component {
               .set({
                 uid: id,
                 userId: token,
+                created_at: new Date(),
                 has_any_health_condition_that_requires_to_stay_at_home:
                   values.home,
                 has_classic_symptoms_for_the_past_3_days: values.cough,
@@ -87,10 +76,10 @@ class Health extends React.Component {
               .doc(token)
               .update({
                 healthId: id,
+                updated_at: new Date(),
               });
 
             this.setState({loading: false});
-            ShowMessage(type.DONE, 'Saved');
             this.props.navigation.navigate('Covid');
           } catch (e) {
             this.setState({loading: false});

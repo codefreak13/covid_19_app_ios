@@ -8,26 +8,18 @@ import {
   KeyboardAvoidingView,
   TouchableNativeFeedback,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {Formik} from 'formik';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
+import ShowMessage, {type} from '../toster/ShowMessage';
 
 class Symptoms extends React.Component {
   state = {
-    fever: '',
-    tempScale: '',
-    coughEpisodes: '',
-    fatigue: '',
-    breathing: '',
-    soreThroat: '',
-    chestPain: '',
-    abdominalPain: '',
-    diarrhoea: '',
-    drowsiness: '',
-    meals: '',
-    taste: '',
-    voice: '',
     sliderValue: 61,
+    loading: false,
   };
 
   static navigationOptions = {headerShown: false};
@@ -36,24 +28,71 @@ class Symptoms extends React.Component {
     return (
       <Formik
         initialValues={{
-          fever: '',
-          tempScale: '',
-          coughEpisodes: '',
-          fatigue: '',
-          breathing: '',
-          soreThroat: '',
-          chestPain: '',
-          abdominalPain: '',
-          diarrhoea: '',
-          drowsiness: '',
-          meals: '',
-          taste: '',
-          voice: '',
+          fever: 'No',
+          temperature: '',
+          tempScale: 'C',
+          coughEpisodes: 'No',
+          fatigue: 'No',
+          breathing: 'No',
+          soreThroat: 'No',
+          headache: 'No',
+          chestPain: 'No',
+          abdominalPain: 'No',
+          diarrhoea: 'No',
+          drowsiness: 'No',
+          meals: 'No',
+          taste: 'No',
+          voice: 'No',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          const token = await AsyncStorage.getItem('token');
+          const id = firestore()
+            .collection('symptoms')
+            .doc().id;
+          this.setState({loading: true});
+          try {
+            await firestore()
+              .collection('symptoms')
+              .doc(id)
+              .set({
+                uid: id,
+                userId: token,
+                created_at: new Date(),
+                has_fever_or_a_high_temperature: values.fever,
+                temperature: values.temperature,
+                temperature_scale: values.tempScale,
+                has_persistent_cough: values.coughEpisodes,
+                is_feeling_unwell_or_experiencing_fatigue: values.fatigue,
+                has_difficulty_breathing: values.breathing,
+                has_sore_throat: values.soreThroat,
+                has_headache: values.headache,
+                has_chest_pain_or_chest_tightness: values.chestPain,
+                has_an_unusual_abdominal_pain: values.abdominalPain,
+                is_experiencing_diarrhoea: values.diarrhoea,
+                is_experiencing_confusion_disorientation_or_drowsiness:
+                  values.drowsiness,
+                has_been_skipping_meals: values.meals,
+                has_loss_of_smell_or_taste: values.taste,
+                has_an_unusually_hoarse_voice: values.voice,
+              });
+
+            await firestore()
+              .collection('users')
+              .doc(token)
+              .update({
+                symptomsId: id,
+                updated_at: new Date(),
+              });
+
+            this.setState({loading: false});
+            this.props.navigation.navigate('Location');
+          } catch (e) {
+            this.setState({loading: false});
+            let err = e.message.split(' ');
+            err.shift();
+            ShowMessage(type.ERROR, err.join(' '));
+            console.log(err.join(' '));
+          }
         }}>
         {({
           values,
@@ -206,6 +245,21 @@ class Symptoms extends React.Component {
                   </View>
                 </View>
                 <View style={styles.section}>
+                  <Text style={styles.sectionText}>Do you have headache?</Text>
+                  <View style={styles.picker}>
+                    <Picker
+                      onChangeText={handleChange('headache')}
+                      selectedValue={values.headache}
+                      onBlur={handleBlur('headache')}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setFieldValue('headache', itemValue)
+                      }>
+                      <Picker.Item label="No" value="No" color="#979797" />
+                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                    </Picker>
+                  </View>
+                </View>
+                <View style={styles.section}>
                   <Text style={styles.sectionText}>
                     Do you have any chest pain or chest tightness?
                   </Text>
@@ -327,7 +381,11 @@ class Symptoms extends React.Component {
                 </View>
                 <TouchableNativeFeedback onPress={handleSubmit}>
                   <View style={styles.signupbox}>
-                    <Text style={styles.signuptext}>Next</Text>
+                    {this.state.loading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={styles.signuptext}>Next</Text>
+                    )}
                   </View>
                 </TouchableNativeFeedback>
               </View>
@@ -362,7 +420,7 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   slider: {
-    width: '100%',
+    width: '110%',
   },
   picker: {
     width: '100%',

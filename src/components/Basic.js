@@ -131,9 +131,9 @@ class Basic extends React.Component {
             city,
             state,
             country,
+            created_at: new Date(),
           });
         this.setState({loading: false});
-        ShowMessage(type.DONE, 'Saved');
         this.props.navigation.navigate('Health');
       } catch (e) {
         this.setState({loading: false});
