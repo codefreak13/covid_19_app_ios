@@ -24,7 +24,8 @@ class ReturningScreen extends React.Component {
           health advice. If you need advice please visit WHO website or speak to
           a doctor.
         </Text>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          onPress={() => this.props.navigation.navigate('Covid')}>
           <View style={styles.signupbox}>
             <Text style={styles.signuptext}>Track Symptoms</Text>
           </View>

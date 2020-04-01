@@ -37,7 +37,10 @@ class Treatment extends React.Component {
               .collection('users')
               .doc(token)
               .update({
-                'treatments.other': values.optional,
+                treatments: {
+                  current_treatment: 'Other treatment',
+                  description: values.optional,
+                },
                 updated_at: new Date(),
               });
             this.setState({loading: false});

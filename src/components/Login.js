@@ -63,8 +63,6 @@ export default class Login extends React.Component {
                 .collection('users')
                 .doc(user.uid)
                 .get();
-              // console.log(user, 'user');
-              // console.log('User data', documentSnapshot.data());
               const token = user.uid;
               await AsyncStorage.setItem('token', token);
               this.props.navigation.navigate('Basic');

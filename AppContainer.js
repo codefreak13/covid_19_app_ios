@@ -36,7 +36,7 @@ const AppNavigator = createStackNavigator(
     Treatment,
     Treatment2,
   },
-  {initialRouteName: 'Treatment'},
+  {initialRouteName: 'Basic'},
 );
 
 // const AppContainer = createAppContainer(AppNavigator);

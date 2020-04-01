@@ -151,6 +151,14 @@ android {
             keyPassword 'android'
         }
     }
+    signingConfigs {
+        release {
+            storeFile file('your_key_name.keystore')
+            storePassword 'sarkijembo0712'
+            keyAlias 'covid_19_symptom_tracker'
+            keyPassword 'sarkijembo0712'
+        }
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug

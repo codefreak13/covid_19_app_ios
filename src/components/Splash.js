@@ -10,15 +10,9 @@ import Icon from '../assets/health-icon.svg';
 import Arrow from '../assets/right-arrow.svg';
 import TopBackground from '../assets/top-background.svg';
 import RightBackground from '../assets/right-background.svg';
-import AsyncStorage from '@react-native-community/async-storage';
 
 class Splash extends React.Component {
   static navigationOptions = {headerShown: false};
-
-  async componentDidMount() {
-    const token = await AsyncStorage.getItem('token');
-    token && this.props.navigation.navigate('ReturningScreen');
-  }
 
   render() {
     return (

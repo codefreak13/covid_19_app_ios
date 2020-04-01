@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   slider: {
-    width: '100%',
+    width: '110%',
   },
   picker: {
     width: '100%',

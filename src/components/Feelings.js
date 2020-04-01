@@ -17,12 +17,14 @@ class Feelings extends React.Component {
       <View style={styles.container}>
         <Icon style={styles.icon} />
         <Text style={styles.head}>How do you feel today?</Text>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          onPress={() => this.props.navigation.navigate('Final')}>
           <View style={styles.signupbox}>
             <Text style={styles.signuptext}>I feel great</Text>
           </View>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          onPress={() => this.props.navigation.navigate('Symptoms')}>
           <View style={styles.signupbox}>
             <Text style={styles.signuptext}>I feel sick</Text>
           </View>

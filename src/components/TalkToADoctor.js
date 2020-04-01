@@ -15,6 +15,7 @@ import {
 import {Formik} from 'formik';
 import Aegle from '../assets/aegle.svg';
 import * as yup from 'yup';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class TalkToADoctor extends React.Component {
   state = {
@@ -67,9 +68,8 @@ export default class TalkToADoctor extends React.Component {
                   appointmentReason: '',
                 }}
                 onSubmit={values => {
-                  this.props.navigation.navigate('SignUpName', {
-                    email: values.email,
-                  });
+                  AsyncStorage.clear();
+                  this.props.navigation.navigate('CreateAccount');
                 }}
                 validationSchema={validationSchema}>
                 {({
@@ -134,6 +134,11 @@ export default class TalkToADoctor extends React.Component {
                           <Picker.Item
                             label="Appointment time"
                             value="Abia"
+                            color="#979797"
+                          />
+                          <Picker.Item
+                            label="12am"
+                            value="12"
                             color="#979797"
                           />
                         </Picker>
