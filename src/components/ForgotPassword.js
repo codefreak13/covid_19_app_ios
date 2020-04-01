@@ -14,6 +14,8 @@ import {
 import * as yup from 'yup';
 import {Formik} from 'formik';
 import Arrow from '../assets/arrow.svg';
+import ShowMessage, {type} from '../toster/ShowMessage';
+import auth from '@react-native-firebase/auth';
 
 export default class ForgotPassword extends React.Component {
   state = {
@@ -25,17 +27,30 @@ export default class ForgotPassword extends React.Component {
 
   render() {
     const validationSchema = yup.object().shape({
-      email: yup.string().required(),
+      email: yup
+        .string()
+        .required()
+        .email(),
     });
     return (
       <Formik
         initialValues={{
           email: '',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          this.setState({loading: true});
+          try {
+            await auth().sendPasswordResetEmail(values.email.toLowerCase());
+            this.setState({loading: false});
+            ShowMessage(type.DONE, 'Mail sent, Please check your mailbox.');
+            values.email = '';
+          } catch (e) {
+            this.setState({loading: false});
+            let err = e.message.split(' ');
+            err.shift();
+            ShowMessage(type.ERROR, err.join(' '));
+            console.log(err.join(' '));
+          }
         }}
         validationSchema={validationSchema}>
         {({
@@ -55,7 +70,8 @@ export default class ForgotPassword extends React.Component {
               keyboardShouldPersistTaps={'handled'}>
               <View style={styles.container}>
                 <View>
-                  <TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback
+                    onPress={() => this.props.navigation.goBack()}>
                     <View>
                       <Arrow />
                     </View>
@@ -90,7 +106,11 @@ export default class ForgotPassword extends React.Component {
                   <View>
                     <TouchableNativeFeedback onPress={handleSubmit}>
                       <View style={styles.signupbox}>
-                        <Text style={styles.signuptext}>Reset</Text>
+                        {this.state.loading ? (
+                          <ActivityIndicator color="#fff" />
+                        ) : (
+                          <Text style={styles.signuptext}>Reset</Text>
+                        )}
                       </View>
                     </TouchableNativeFeedback>
                   </View>
@@ -129,6 +149,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderStyle: 'solid',
     padding: 15,
+    width: '100%',
   },
   inputDiv: {
     marginBottom: 20,

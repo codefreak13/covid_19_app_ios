@@ -11,6 +11,9 @@ import Arrow from '../assets/whiteArrow.svg';
 
 class Location extends React.Component {
   state = {sliderValue: 75};
+
+  static navigationOptions = {headerShown: false};
+
   render() {
     return (
       <ScrollView

@@ -39,7 +39,8 @@ export default class Terms extends React.Component {
               </Text>
             </View>
 
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback
+              onPress={() => this.props.navigation.navigate('Basic')}>
               <View style={styles.signupbox}>
                 <Text style={styles.signuptext}>Accept</Text>
               </View>

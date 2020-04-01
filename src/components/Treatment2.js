@@ -18,6 +18,8 @@ class Treatment extends React.Component {
     sliderValue: 100,
   };
 
+  static navigationOptions = {headerShown: false};
+
   render() {
     return (
       <Formik

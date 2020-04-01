@@ -7,9 +7,13 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableNativeFeedback,
+  ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {Formik} from 'formik';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
+import ShowMessage, {type} from '../toster/ShowMessage';
 
 class Health extends React.Component {
   state = {
@@ -26,7 +30,10 @@ class Health extends React.Component {
     cough: '',
     home: '',
     sliderValue: 43,
+    loading: false,
   };
+
+  static navigationOptions = {headerShown: false};
 
   render() {
     return (
@@ -45,10 +52,53 @@ class Health extends React.Component {
           cough: '',
           home: '',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          const token = await AsyncStorage.getItem('token');
+          const id = firestore()
+            .collection('healths')
+            .doc().id;
+          this.setState({loading: true});
+          try {
+            await firestore()
+              .collection('healths')
+              .doc(id)
+              .set({
+                uid: id,
+                userId: token,
+                has_any_health_condition_that_requires_to_stay_at_home:
+                  values.home,
+                has_classic_symptoms_for_the_past_3_days: values.cough,
+                has_diabetes: values.diabetes,
+                has_heart_diesease: values.heart,
+                has_lung_diesease_or_asthma: values.asthma,
+                has_pre_existing_health_conditions: values.daily,
+                has_taken_antipyretics_in_the_past_3_days: values.ibuprofen,
+                has_undergo_chemotherapy_radiotherapy_or_immunotherapy_for_cancer:
+                  values.cancer,
+                is_a_smoker: values.smoker,
+                is_currently_taking_immunosuppressant: values.suppresant,
+                is_taking_blood_pressure_medications_ending_in_pril:
+                  values.pril,
+                think_you_have_COVID19_but_not_been_tested: values.covid,
+              });
+
+            await firestore()
+              .collection('users')
+              .doc(token)
+              .update({
+                healthId: id,
+              });
+
+            this.setState({loading: false});
+            ShowMessage(type.DONE, 'Saved');
+            this.props.navigation.navigate('Covid');
+          } catch (e) {
+            this.setState({loading: false});
+            let err = e.message.split(' ');
+            err.shift();
+            ShowMessage(type.ERROR, err.join(' '));
+            console.log(err.join(' '));
+          }
         }}>
         {({
           values,
@@ -86,7 +136,6 @@ class Health extends React.Component {
                   </Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('daily')}
                       selectedValue={values.daily}
                       onBlur={handleBlur('daily')}
                       onValueChange={(itemValue, itemIndex) =>
@@ -103,7 +152,6 @@ class Health extends React.Component {
                   </Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('heart')}
                       selectedValue={values.heart}
                       onBlur={handleBlur('heart')}
                       onValueChange={(itemValue, itemIndex) =>
@@ -118,7 +166,6 @@ class Health extends React.Component {
                   <Text style={styles.sectionText}>Do you have diabetes?</Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('diabetes')}
                       selectedValue={values.diabetes}
                       onBlur={handleBlur('diabetes')}
                       onValueChange={(itemValue, itemIndex) =>
@@ -135,7 +182,6 @@ class Health extends React.Component {
                   </Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('asthma')}
                       selectedValue={values.asthma}
                       onBlur={handleBlur('asthma')}
                       onValueChange={(itemValue, itemIndex) =>
@@ -150,7 +196,6 @@ class Health extends React.Component {
                   <Text style={styles.sectionText}>Are you a smoker?</Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('smoker')}
                       selectedValue={values.smoker}
                       onBlur={handleBlur('smoker')}
                       onValueChange={(itemValue, itemIndex) =>
@@ -168,7 +213,6 @@ class Health extends React.Component {
                   </Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('cancer')}
                       selectedValue={values.cancer}
                       onBlur={handleBlur('cancer')}
                       onValueChange={(itemValue, itemIndex) =>
@@ -185,7 +229,6 @@ class Health extends React.Component {
                   </Text>
                   <View style={styles.picker}>
                     <Picker
-                      onChangeText={handleChange('suppresant')}
                       selectedValue={values.suppresant}
                       onBlur={handleBlur('suppresant')}
                       onValueChange={(itemValue, itemIndex) =>
@@ -202,7 +245,6 @@ class Health extends React.Component {
                     </Text>
                     <View style={styles.picker}>
                       <Picker
-                        onChangeText={handleChange('ibuprofen')}
                         selectedValue={values.ibuprofen}
                         onBlur={handleBlur('ibuprofen')}
                         onValueChange={(itemValue, itemIndex) =>
@@ -220,7 +262,6 @@ class Health extends React.Component {
                     </Text>
                     <View style={styles.picker}>
                       <Picker
-                        onChangeText={handleChange('pril')}
                         selectedValue={values.pril}
                         onBlur={handleBlur('pril')}
                         onValueChange={(itemValue, itemIndex) =>
@@ -238,7 +279,6 @@ class Health extends React.Component {
                     </Text>
                     <View style={styles.picker}>
                       <Picker
-                        onChangeText={handleChange('covid')}
                         selectedValue={values.covid}
                         onBlur={handleBlur('covid')}
                         onValueChange={(itemValue, itemIndex) =>
@@ -256,7 +296,6 @@ class Health extends React.Component {
                     </Text>
                     <View style={styles.picker}>
                       <Picker
-                        onChangeText={handleChange('cough')}
                         selectedValue={values.cough}
                         onBlur={handleBlur('cough')}
                         onValueChange={(itemValue, itemIndex) =>
@@ -274,7 +313,6 @@ class Health extends React.Component {
                     </Text>
                     <View style={styles.picker}>
                       <Picker
-                        onChangeText={handleChange('home')}
                         selectedValue={values.home}
                         onBlur={handleBlur('home')}
                         onValueChange={(itemValue, itemIndex) =>
@@ -288,7 +326,11 @@ class Health extends React.Component {
                 </View>
                 <TouchableNativeFeedback onPress={handleSubmit}>
                   <View style={styles.signupbox}>
-                    <Text style={styles.signuptext}>Next</Text>
+                    {this.state.loading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={styles.signuptext}>Next</Text>
+                    )}
                   </View>
                 </TouchableNativeFeedback>
               </View>

@@ -18,6 +18,8 @@ class Location extends React.Component {
     sliderValue: 66,
   };
 
+  static navigationOptions = {headerShown: false};
+
   render() {
     return (
       <Formik

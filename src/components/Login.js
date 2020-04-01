@@ -13,6 +13,10 @@ import {
 } from 'react-native';
 import * as yup from 'yup';
 import {Formik} from 'formik';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import ShowMessage, {type} from '../toster/ShowMessage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Login extends React.Component {
   state = {
@@ -30,8 +34,14 @@ export default class Login extends React.Component {
 
   render() {
     const validationSchema = yup.object().shape({
-      email: yup.string().required(),
-      password: yup.string().required(),
+      email: yup
+        .string()
+        .required()
+        .email(),
+      password: yup
+        .string()
+        .required()
+        .min(6),
     });
     return (
       <Formik
@@ -39,10 +49,32 @@ export default class Login extends React.Component {
           email: '',
           password: '',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          this.setState({loading: true});
+          try {
+            const login = await auth().signInWithEmailAndPassword(
+              values.email.toLowerCase(),
+              values.password,
+            );
+            this.setState({loading: false});
+            if (login.user) {
+              const {user} = login;
+              const documentSnapshot = await firestore()
+                .collection('users')
+                .doc(user.uid)
+                .get();
+              // console.log(user, 'user');
+              // console.log('User data', documentSnapshot.data());
+              const token = user.uid;
+              await AsyncStorage.setItem('token', token);
+              this.props.navigation.navigate('Basic');
+            }
+          } catch (e) {
+            this.setState({loading: false});
+            let err = e.message.split(' ');
+            err.shift();
+            ShowMessage(type.ERROR, err.join(' '));
+          }
         }}
         validationSchema={validationSchema}>
         {({
@@ -92,12 +124,14 @@ export default class Login extends React.Component {
                     <View style={styles.passwordMenu}>
                       <TextInput
                         keyboardType="default"
+                        style={{width: '90%'}}
                         placeholderTextColor="#979797"
                         value={values.password}
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
                         placeholder="Password"
                         name="password"
+                        secureTextEntry={this.state.showPassword}
                       />
                       <TouchableWithoutFeedback onPress={this.toggleSwitch}>
                         <View>
@@ -126,12 +160,19 @@ export default class Login extends React.Component {
                   <View>
                     <TouchableNativeFeedback onPress={handleSubmit}>
                       <View style={styles.signupbox}>
-                        <Text style={styles.signuptext}>Create account</Text>
+                        {this.state.loading ? (
+                          <ActivityIndicator color="#fff" />
+                        ) : (
+                          <Text style={styles.signuptext}>Login</Text>
+                        )}
                       </View>
                     </TouchableNativeFeedback>
                   </View>
                   <View style={styles.footTextDiv}>
-                    <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                      onPress={() =>
+                        this.props.navigation.navigate('ForgotPassword')
+                      }>
                       <View>
                         <Text
                           style={
@@ -149,7 +190,10 @@ export default class Login extends React.Component {
                     <Text style={(styles.footText, {marginRight: 10})}>
                       Don’t have account?
                     </Text>
-                    <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                      onPress={() =>
+                        this.props.navigation.navigate('CreateAccount')
+                      }>
                       <View>
                         <Text
                           style={
@@ -210,6 +254,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderStyle: 'solid',
     padding: 15,
+    width: '100%',
   },
   inputDiv: {
     marginBottom: 20,

@@ -30,6 +30,8 @@ class Symptoms extends React.Component {
     sliderValue: 61,
   };
 
+  static navigationOptions = {headerShown: false};
+
   render() {
     return (
       <Formik

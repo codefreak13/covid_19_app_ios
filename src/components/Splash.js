@@ -1,12 +1,24 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Icon from '../assets/health-icon.svg';
 import Arrow from '../assets/right-arrow.svg';
 import TopBackground from '../assets/top-background.svg';
 import RightBackground from '../assets/right-background.svg';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class Splash extends React.Component {
   static navigationOptions = {headerShown: false};
+
+  async componentDidMount() {
+    const token = await AsyncStorage.getItem('token');
+    token && this.props.navigation.navigate('ReturningScreen');
+  }
 
   render() {
     return (
@@ -18,18 +30,33 @@ class Splash extends React.Component {
           Carry out a daily self-report, help identify high-risk areas and track
           how fast the virus is spreading.
         </Text>
-        <Icon />
+        <Icon
+          width={200}
+          height={200}
+          style={{alignSelf: 'center', marginVertical: 20}}
+        />
         <Text style={styles.bodyText}>
           This app allows you track if you have Covid-19, but does not give
           health advice. If you need advice please visit WHO website or speak to
           a doctor.
         </Text>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          onPress={() => this.props.navigation.navigate('CreateAccount')}>
           <View style={styles.signupbox}>
             <Text style={styles.signuptext}>Get Started</Text>
             <Arrow />
           </View>
         </TouchableNativeFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => this.props.navigation.navigate('Login')}>
+          <View
+            style={{
+              marginTop: 26,
+              alignSelf: 'center',
+            }}>
+            <Text style={styles.login}>Log in</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
@@ -59,11 +86,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+    paddingVertical: 20,
   },
   head: {
     color: '#fff',
-    fontWeight: bold,
+    fontWeight: 'bold',
     fontSize: 30,
     marginBottom: 18,
     fontStyle: 'normal',
@@ -79,7 +107,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontStyle: 'normal',
     color: '#fff',
-    marginVertical: 10,
+    marginVertical: 15,
   },
   bodyText: {
     color: '#fff',
@@ -89,7 +117,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',
-    marginVertical: 10,
+    marginVertical: 15,
   },
   signupbox: {
     backgroundColor: '#fff',
@@ -111,5 +139,14 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     fontStyle: 'normal',
     marginRight: 25,
+  },
+  login: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 15,
+    fontFamily: 'SF Pro Display',
+    alignSelf: 'center',
+    lineHeight: 18,
+    fontStyle: 'normal',
   },
 });

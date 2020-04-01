@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {Formik} from 'formik';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class Symptoms extends React.Component {
   state = {
@@ -18,16 +19,17 @@ class Symptoms extends React.Component {
     sliderValue: 50,
   };
 
+  static navigationOptions = {headerShown: false};
+
   render() {
     return (
       <Formik
         initialValues={{
           covid: '',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          // await AsyncStorage.clear();
+          // this.props.navigation.navigate('Register');
         }}>
         {({
           values,

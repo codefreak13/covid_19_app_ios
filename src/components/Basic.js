@@ -1,26 +1,27 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
-  Image,
   TextInput,
   Picker,
   ScrollView,
   KeyboardAvoidingView,
   TouchableNativeFeedback,
+  ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import CalendarPicker from 'react-native-calendar-picker';
 import Cal from '../assets/calendar.svg';
-import * as yup from 'yup';
-import {Formik} from 'formik';
+import csc from 'country-state-city';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
+import ShowMessage, {type} from '../toster/ShowMessage';
 
 class Basic extends React.Component {
   state = {
-    dueDate: null,
-    gender: '',
+    dueDate: '',
     weight: '',
     feet: '',
     inches: '',
@@ -28,9 +29,17 @@ class Basic extends React.Component {
     country: '',
     state: '',
     city: '',
+    gender: '',
     visible: false,
     sliderValue: 13,
+    countries: [],
+    states: [],
+    cities: [],
+    pageLoad: false,
+    loading: false,
   };
+
+  static navigationOptions = {headerShown: false};
 
   toggle = () => {
     return this.setState(prevState => ({
@@ -45,295 +54,390 @@ class Basic extends React.Component {
     }));
   };
 
+  handleChange(name) {
+    return text => {
+      this.setState({[name]: text});
+    };
+  }
+
+  componentDidMount() {
+    this.setState({pageLoad: true});
+    let data = csc.getAllCountries();
+    this.setState({countries: data, pageLoad: false});
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.country != this.state.country) {
+      const {countries} = this.state;
+      let countryObj = countries.filter(
+        country => country.name == this.state.country,
+      );
+      let countryId = countryObj[0]['id'];
+
+      let data = csc.getStatesOfCountry(countryId);
+      this.setState({states: data});
+    }
+
+    if (prevState.state != this.state.state) {
+      const {states} = this.state;
+      let stateObj = states.filter(state => state.name == this.state.state);
+      let stateId = stateObj[0]['id'];
+
+      let data = csc.getCitiesOfState(stateId);
+      this.setState({cities: data});
+    }
+  }
+
+  handleSubmit = async () => {
+    const {
+      dueDate,
+      weight,
+      feet,
+      inches,
+      contact,
+      country,
+      state,
+      city,
+      gender,
+    } = this.state;
+
+    if (
+      dueDate !== '' &&
+      weight !== '' &&
+      feet !== '' &&
+      inches !== '' &&
+      contact !== '' &&
+      country !== '' &&
+      state !== '' &&
+      city !== '' &&
+      gender !== ''
+    ) {
+      const token = await AsyncStorage.getItem('token');
+      this.setState({loading: true});
+      try {
+        await firestore()
+          .collection('users')
+          .doc(token)
+          .set({
+            uid: token,
+            date_of_birth: dueDate.toString().slice(0, 16),
+            height: {
+              feet: feet,
+              inches: inches,
+            },
+            is_a_doctor_nurse_or_paramedic: contact,
+            gender,
+            weight,
+            city,
+            state,
+            country,
+          });
+        this.setState({loading: false});
+        ShowMessage(type.DONE, 'Saved');
+        this.props.navigation.navigate('Health');
+      } catch (e) {
+        this.setState({loading: false});
+        let err = e.message.split(' ');
+        err.shift();
+        ShowMessage(type.ERROR, err.join(' '));
+        console.log(err.join(' '));
+      }
+    } else {
+      ShowMessage(type.ERROR, 'Please fill all fields');
+      return;
+    }
+  };
+
   render() {
     const date = this.state.dueDate
       ? this.state.dueDate.toString().slice(0, 16)
       : '';
-    const validationSchema = yup.object().shape({
-      weight: yup.string().required(),
-      feet: yup.string().required(),
-      inches: yup.string().required(),
-      contact: yup.string().required(),
-      country: yup.string().required(),
-      state: yup.string().required(),
-      city: yup.string().required(),
-      dueDate: yup.string().required(),
-      gender: yup.string().required(),
-    });
+    const genders = ['male', 'female'];
     return (
-      <Formik
-        initialValues={{
-          weight: '',
-          feet: '',
-          inches: '',
-          contact: '',
-          country: '',
-          state: '',
-          city: '',
-          dueDate: '',
-          gender: '',
-        }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
-        }}
-        validationSchema={validationSchema}>
-        {({
-          values,
-          handleChange,
-          errors,
-          setFieldValue,
-          setFieldTouched,
-          touched,
-          isValid,
-          handleBlur,
-          handleSubmit,
-        }) => (
-          <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#fff'}}>
-            <ScrollView
-              contentContainerStyle={{flexGrow: 1}}
-              keyboardShouldPersistTaps={'handled'}>
-              <View style={styles.main}>
-                <Text style={styles.head}>Let’s get to know you</Text>
-                <Slider
-                  style={styles.slider}
-                  thumbTintColor="#2560FB"
-                  minimumTrackTintColor="#2560FB"
-                  maximumValue={100}
-                  minimumValue={0}
-                  step={1}
-                  value={this.state.sliderValue}
-                  onValueChange={sliderValue => this.setState({sliderValue})}
-                />
-                <View style={styles.section}>
-                  <Text style={styles.sectionText}>Date of birth</Text>
-                  <TouchableWithoutFeedback onPress={this.toggle}>
-                    <View style={styles.bar}>
-                      {date ? (
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: 'grey',
-                          }}>
-                          {date}
-                        </Text>
-                      ) : (
-                        <Text style={styles.calendarStyle}>DD/MM/YYYY</Text>
-                      )}
-                      <Cal />
-                    </View>
-                  </TouchableWithoutFeedback>
-                  {this.state.visible && (
-                    <View>
-                      <CalendarPicker
-                        onDateChange={this.onDateChange}
-                        minDate={new Date()}
-                        todayBackgroundColor="#564FF5"
-                        name="dueDate"
-                        // selectedDayColor="#7300e6"
-                        // selectedDayTextColor="#FFFFFF"
-                      />
-                    </View>
-                  )}
-                  {/* {touched.dueDate && errors.dueDate && (
+      <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#fff'}}>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          keyboardShouldPersistTaps={'handled'}>
+          {this.state.pageLoad ? (
+            <ActivityIndicator
+              size="large"
+              color="#564FF5"
+              style={{flex: 1, alignSelf: 'center'}}
+            />
+          ) : (
+            <View style={styles.main}>
+              <Text style={styles.head}>Let’s get to know you</Text>
+              <Slider
+                style={styles.slider}
+                thumbTintColor="#2560FB"
+                minimumTrackTintColor="#2560FB"
+                maximumValue={100}
+                minimumValue={0}
+                step={1}
+                value={this.state.sliderValue}
+                onValueChange={sliderValue => this.setState({sliderValue})}
+              />
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>Date of birth</Text>
+                <TouchableWithoutFeedback onPress={this.toggle}>
+                  <View style={styles.bar}>
+                    {date ? (
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: 'grey',
+                        }}>
+                        {date}
+                      </Text>
+                    ) : (
+                      <Text style={styles.calendarStyle}>DD/MM/YYYY</Text>
+                    )}
+                    <Cal />
+                  </View>
+                </TouchableWithoutFeedback>
+                {this.state.visible && (
+                  <View>
+                    <CalendarPicker
+                      onDateChange={this.onDateChange}
+                      minDate={new Date()}
+                      todayBackgroundColor="#564FF5"
+                      name="dueDate"
+                      // selectedDayColor="#7300e6"
+                      // selectedDayTextColor="#FFFFFF"
+                    />
+                  </View>
+                )}
+                {/* {touched.dueDate && errors.dueDate && (
                     <Text style={{fontSize: 10, color: 'red'}}>
                       {errors.dueDate}
                     </Text>
                   )} */}
-                </View>
-                <View style={styles.section}>
-                  <Text style={styles.sectionText}>Gender</Text>
-                  <View style={styles.picker}>
-                    <Picker
-                      onChangeText={handleChange('gender')}
-                      selectedValue={values.gender}
-                      onBlur={handleBlur('gender')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('gender', itemValue)
-                      }>
+              </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>Gender</Text>
+                <View style={styles.picker}>
+                  <Picker
+                    selectedValue={this.state.gender}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.setState({gender: itemValue})
+                    }>
+                    <Picker.Item
+                      label="Choose gender"
+                      value=""
+                      color="#979797"
+                    />
+                    {genders.map(gender => (
                       <Picker.Item
-                        label="Choose gender"
-                        value="Abia"
+                        key={gender}
+                        label={gender}
+                        value={gender}
                         color="#979797"
                       />
-                    </Picker>
-                  </View>
-                  {touched.gender && errors.gender && (
+                    ))}
+                  </Picker>
+                </View>
+                {/* {touched.gender && errors.gender && (
                     <Text style={{fontSize: 10, color: 'red'}}>
                       {errors.gender}
                     </Text>
-                  )}
+                  )} */}
+              </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>Weight</Text>
+                <View style={styles.picker}>
+                  <TextInput
+                    keyboardType="number-pad"
+                    placeholderTextColor="#979797"
+                    value={this.state.weight}
+                    onChangeText={this.handleChange('weight')}
+                    placeholder="Kg"
+                    name="weight"
+                  />
                 </View>
-                <View style={styles.section}>
-                  <Text style={styles.sectionText}>Weight</Text>
-                  <View style={styles.picker}>
-                    <TextInput
-                      keyboardType="default"
-                      placeholderTextColor="#979797"
-                      value={values.weight}
-                      onChangeText={handleChange('weight')}
-                      onBlur={handleBlur('weight')}
-                      placeholder="Kg"
-                      name="weight"
-                    />
-                  </View>
-                  {touched.weight && errors.weight && (
+                {/* {touched.weight && errors.weight && (
                     <Text style={{fontSize: 10, color: 'red'}}>
                       {errors.weight}
                     </Text>
-                  )}
-                </View>
-                <View style={styles.section}>
-                  <Text style={styles.sectionText}>Height</Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <View style={{width: '48%'}}>
-                      <View style={styles.picker1}>
-                        <TextInput
-                          keyboardType="default"
-                          placeholderTextColor="#979797"
-                          value={values.feet}
-                          onChangeText={handleChange('feet')}
-                          onBlur={handleBlur('feet')}
-                          placeholder="Feet"
-                          name="feet"
-                        />
-                      </View>
-                      {touched.feet && errors.feet && (
+                  )} */}
+              </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>Height</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <View style={{width: '48%'}}>
+                    <View style={styles.picker1}>
+                      <TextInput
+                        keyboardType="number-pad"
+                        placeholderTextColor="#979797"
+                        value={this.state.feet}
+                        onChangeText={this.handleChange('feet')}
+                        placeholder="Feet"
+                        name="feet"
+                      />
+                    </View>
+                    {/* {touched.feet && errors.feet && (
                         <Text style={{fontSize: 10, color: 'red'}}>
                           {errors.feet}
                         </Text>
-                      )}
+                      )} */}
+                  </View>
+                  <View style={{width: '48%'}}>
+                    <View style={styles.picker1}>
+                      <TextInput
+                        keyboardType="number-pad"
+                        placeholderTextColor="#979797"
+                        value={this.state.inches}
+                        onChangeText={this.handleChange('inches')}
+                        placeholder="Inches"
+                        name="inches"
+                      />
                     </View>
-                    <View style={{width: '48%'}}>
-                      <View style={styles.picker1}>
-                        <TextInput
-                          keyboardType="default"
-                          placeholderTextColor="#979797"
-                          value={values.inches}
-                          onChangeText={handleChange('inches')}
-                          onBlur={handleBlur('inches')}
-                          placeholder="Inches"
-                          name="inches"
-                        />
-                      </View>
-                      {touched.inches && errors.inches && (
+                    {/* {touched.inches && errors.inches && (
                         <Text style={{fontSize: 10, color: 'red'}}>
                           {errors.inches}
                         </Text>
-                      )}
-                    </View>
+                      )} */}
                   </View>
                 </View>
-                <View style={styles.section}>
-                  <Text style={styles.sectionText}>
-                    Are you a doctor, nurse or paramedic coming in contact with
-                    patients?
-                  </Text>
-                  <View style={styles.picker}>
-                    <TextInput
-                      keyboardType="default"
-                      placeholderTextColor="#979797"
-                      value={values.contact}
-                      onChangeText={handleChange('contact')}
-                      onBlur={handleBlur('contact')}
-                      placeholder="No"
-                      name="contact"
-                    />
-                  </View>
-                  {touched.contact && errors.contact && (
+              </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>
+                  Are you a doctor, nurse or paramedic coming in contact with
+                  patients?
+                </Text>
+                <View style={styles.picker}>
+                  <TextInput
+                    keyboardType="default"
+                    placeholderTextColor="#979797"
+                    value={this.state.contact}
+                    onChangeText={this.handleChange('contact')}
+                    placeholder="No"
+                    name="contact"
+                  />
+                </View>
+                {/* {touched.contact && errors.contact && (
                     <Text style={{fontSize: 10, color: 'red'}}>
                       {errors.contact}
                     </Text>
-                  )}
+                  )} */}
+              </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>Country</Text>
+                <View style={styles.picker}>
+                  <Picker
+                    name="country"
+                    selectedValue={this.state.country}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.setState({country: itemValue})
+                    }>
+                    <Picker.Item
+                      label="Choose country"
+                      value=" "
+                      color="#979797"
+                    />
+                    {this.state.countries &&
+                      this.state.countries.map(country => {
+                        return (
+                          <Picker.Item
+                            key={country.id}
+                            label={country.name}
+                            value={country.name}
+                            color="#979797"
+                          />
+                        );
+                      })}
+                  </Picker>
                 </View>
-                <View style={styles.section}>
-                  <Text style={styles.sectionText}>Country</Text>
-                  <View style={styles.picker}>
-                    <Picker
-                      onChangeText={handleChange('country')}
-                      selectedValue={values.country}
-                      onBlur={handleBlur('country')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('country', itemValue)
-                      }>
-                      <Picker.Item
-                        label="Choose country"
-                        value="Abia"
-                        color="#979797"
-                      />
-                    </Picker>
-                  </View>
-                  {touched.country && errors.country && (
+                {/* {touched.country && errors.country && (
                     <Text style={{fontSize: 10, color: 'red'}}>
                       {errors.country}
                     </Text>
-                  )}
+                  )} */}
+              </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>State</Text>
+                <View style={styles.picker}>
+                  <Picker
+                    selectedValue={this.state.state}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.setState({state: itemValue})
+                    }>
+                    <Picker.Item
+                      label="Choose state"
+                      value=" "
+                      color="#979797"
+                    />
+                    {this.state.states &&
+                      this.state.states.map(state => {
+                        return (
+                          <Picker.Item
+                            key={state.id}
+                            label={state.name}
+                            value={state.name}
+                            color="#979797"
+                          />
+                        );
+                      })}
+                  </Picker>
                 </View>
-                <View style={styles.section}>
-                  <Text style={styles.sectionText}>State</Text>
-                  <View style={styles.picker}>
-                    <Picker
-                      onChangeText={handleChange('state')}
-                      selectedValue={values.state}
-                      onBlur={handleBlur('state')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('state', itemValue)
-                      }>
-                      <Picker.Item
-                        label="Choose state"
-                        value="Abia"
-                        color="#979797"
-                      />
-                    </Picker>
-                  </View>
-                  {touched.state && errors.state && (
+                {/* {touched.state && errors.state && (
                     <Text style={{fontSize: 10, color: 'red'}}>
                       {errors.state}
                     </Text>
-                  )}
+                  )} */}
+              </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>City</Text>
+                <View style={styles.picker}>
+                  <Picker
+                    selectedValue={this.state.city}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.setState({city: itemValue})
+                    }>
+                    <Picker.Item
+                      label="Choose city"
+                      value=" "
+                      color="#979797"
+                    />
+                    {this.state.cities &&
+                      this.state.cities.map(city => {
+                        return (
+                          <Picker.Item
+                            key={city.id}
+                            label={city.name}
+                            value={city.name}
+                            color="#979797"
+                          />
+                        );
+                      })}
+                  </Picker>
                 </View>
-                <View style={styles.section}>
-                  <Text style={styles.sectionText}>City</Text>
-                  <View style={styles.picker}>
-                    <Picker
-                      onChangeText={handleChange('city')}
-                      selectedValue={values.city}
-                      onBlur={handleBlur('city')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('city', itemValue)
-                      }>
-                      <Picker.Item
-                        label="Choose city"
-                        value="Abia"
-                        color="#979797"
-                      />
-                    </Picker>
-                  </View>
-                  {touched.city && errors.city && (
+                {/* {touched.city && errors.city && (
                     <Text style={{fontSize: 10, color: 'red'}}>
                       {errors.city}
                     </Text>
+                  )} */}
+              </View>
+              <Text style={styles.footerText}>
+                We use this to predict which places or areas are likely to soon
+                see a spike in Covid-19 cases
+              </Text>
+              <TouchableNativeFeedback onPress={this.handleSubmit}>
+                <View style={styles.signupbox}>
+                  {this.state.loading ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={styles.signuptext}>Next</Text>
                   )}
                 </View>
-                <Text style={styles.footerText}>
-                  We use this to predict which places or areas are likely to
-                  soon see a spike in Covid-19 cases
-                </Text>
-                <TouchableNativeFeedback onPress={handleSubmit}>
-                  <View style={styles.signupbox}>
-                    <Text style={styles.signuptext}>Next</Text>
-                  </View>
-                </TouchableNativeFeedback>
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
-        )}
-      </Formik>
+              </TouchableNativeFeedback>
+            </View>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -371,7 +475,7 @@ const styles = StyleSheet.create({
     lineHeight: 29,
   },
   slider: {
-    width: '100%',
+    width: '110%',
   },
   picker: {
     width: '100%',

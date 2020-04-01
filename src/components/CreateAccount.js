@@ -13,6 +13,10 @@ import {
 } from 'react-native';
 import * as yup from 'yup';
 import {Formik} from 'formik';
+import ShowMessage, {type} from '../toster/ShowMessage';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class CreateAccount extends React.Component {
   state = {
@@ -20,7 +24,7 @@ export default class CreateAccount extends React.Component {
     showPassword: true,
     email: '',
     name: '',
-    number: '',
+    phoneNumber: '',
     password: '',
   };
 
@@ -32,23 +36,59 @@ export default class CreateAccount extends React.Component {
 
   render() {
     const validationSchema = yup.object().shape({
-      email: yup.string().required(),
+      email: yup
+        .string()
+        .required()
+        .email(),
+      password: yup
+        .string()
+        .required()
+        .min(6),
       name: yup.string().required(),
-      number: yup.string().required(),
-      password: yup.string().required(),
+      phoneNumber: yup
+        .number()
+        .required()
+        .min(11),
     });
     return (
       <Formik
         initialValues={{
           email: '',
           name: '',
-          number: '',
+          phoneNumber: '',
           password: '',
         }}
-        onSubmit={values => {
-          this.props.navigation.navigate('SignUpName', {
-            email: values.email,
-          });
+        onSubmit={async values => {
+          this.setState({loading: true});
+          try {
+            const register = await auth().createUserWithEmailAndPassword(
+              values.email,
+              values.password,
+            );
+            if (register.user) {
+              const {user} = register;
+              await firestore()
+                .collection('users')
+                .doc(user.uid)
+                .set({
+                  full_name: values.name,
+                  email: values.email.toLowerCase(),
+                  phone_number: values.phoneNumber,
+                  created_at: new Date(),
+                });
+              const token = user.uid;
+              await AsyncStorage.setItem('token', token);
+              this.setState({loading: false});
+              ShowMessage(type.DONE, 'Successfuly Registered');
+              this.props.navigation.navigate('Terms');
+            }
+          } catch (e) {
+            this.setState({loading: false});
+            let err = e.message.split(' ');
+            err.shift();
+            ShowMessage(type.ERROR, err.join(' '));
+            console.log(err.join(' '));
+          }
         }}
         validationSchema={validationSchema}>
         {({
@@ -117,15 +157,15 @@ export default class CreateAccount extends React.Component {
                       keyboardType="number-pad"
                       style={styles.input}
                       placeholderTextColor="#979797"
-                      value={values.number}
-                      onChangeText={handleChange('number')}
-                      onBlur={handleBlur('number')}
+                      value={values.phoneNumber}
+                      onChangeText={handleChange('phoneNumber')}
+                      onBlur={handleBlur('phoneNumber')}
                       placeholder="Phone number"
-                      name="number"
+                      name="phoneNumber"
                     />
-                    {touched.number && errors.number && (
+                    {touched.phoneNumber && errors.phoneNumber && (
                       <Text style={{fontSize: 10, color: 'red'}}>
-                        {errors.number}
+                        {errors.phoneNumber}
                       </Text>
                     )}
                   </View>
@@ -139,6 +179,8 @@ export default class CreateAccount extends React.Component {
                         onBlur={handleBlur('password')}
                         placeholder="Password"
                         name="password"
+                        style={{width: '90%'}}
+                        secureTextEntry={this.state.showPassword}
                       />
                       <TouchableWithoutFeedback onPress={this.toggleSwitch}>
                         <View>
@@ -167,7 +209,11 @@ export default class CreateAccount extends React.Component {
                   <View>
                     <TouchableNativeFeedback onPress={handleSubmit}>
                       <View style={styles.signupbox}>
-                        <Text style={styles.signuptext}>Create account</Text>
+                        {this.state.loading ? (
+                          <ActivityIndicator color="#fff" />
+                        ) : (
+                          <Text style={styles.signuptext}>Create account</Text>
+                        )}
                       </View>
                     </TouchableNativeFeedback>
                   </View>
@@ -175,7 +221,8 @@ export default class CreateAccount extends React.Component {
                     <Text style={(styles.footText, {marginRight: 10})}>
                       Already have an account?
                     </Text>
-                    <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                      onPress={() => this.props.navigation.navigate('Login')}>
                       <View>
                         <Text
                           style={
@@ -236,6 +283,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderStyle: 'solid',
     padding: 15,
+    width: '100%',
   },
   inputDiv: {
     marginBottom: 20,
