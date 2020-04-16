@@ -1,10 +1,12 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 
 class AuthLoadingScreen extends React.Component {
   componentDidMount() {
     this._bootstrapAsync();
+    SplashScreen.hide();
   }
 
   // Fetch the token from storage then navigate to our appropriate place
@@ -15,19 +17,13 @@ class AuthLoadingScreen extends React.Component {
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
     this.props.navigation.navigate(
-      token ? (email ? 'VerifyAccount' : 'ReturningScreen') : 'Auth',
+      token ? (email ? 'VerifyAccount' : 'App') : 'Auth',
     );
   };
 
   // Render any loading content that you like here
   render() {
-    return (
-      <ActivityIndicator
-        size="large"
-        color="#564FF5"
-        style={{flex: 1, alignSelf: 'center'}}
-      />
-    );
+    return <ActivityIndicator color="#564ff5" style={{flex: 1}} size="large" />;
   }
 }
 

@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   ScrollView,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -25,26 +25,26 @@ export default class Terms extends React.Component {
                 understand coronavirus (COVID-19). This app is designed by
                 doctors and scientists for research purposes only. We process
                 pseudonymized data to carry out aggregate statistics on the
-                geographical prevalence of Covid-19 and present such summarized
+                geographical prevalence of COVID-19 and present such summarized
                 statistics to our research partners on an irreversibly
                 anonymized basis. The processing is necessary for statistical
                 purposes and we only provide our partners with anonymized and
                 summarized statistics from which the identification of a
                 specific natural person is impossible. Our legitimate interest
                 in processing data for these purposes is to support progress in
-                Covid-19 research in line with our goals which is also in the
+                COVID-19 research in line with our goals which is also in the
                 public interest to improve healthcare. By using this app, you
                 consent to our using the personal information we collect through
                 your use of this app in the way we have described.
               </Text>
             </View>
 
-            <TouchableNativeFeedback
+            <TouchableWithoutFeedback
               onPress={() => this.props.navigation.navigate('Basic')}>
               <View style={styles.signupbox}>
                 <Text style={styles.signuptext}>Accept</Text>
               </View>
-            </TouchableNativeFeedback>
+            </TouchableWithoutFeedback>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     flexDirection: 'column',
     justifyContent: 'center',
-    marginHorizontal: 30,
+    marginHorizontal: 15,
   },
   head: {
     color: '#333333',
@@ -72,12 +72,13 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     fontStyle: 'normal',
     lineHeight: 43,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
+    width: '100%',
   },
   subText: {
     color: '#000000',
     fontSize: 16,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 26,
     fontWeight: 'normal',
   },
@@ -89,13 +90,13 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 43,
   },
   signuptext: {
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',

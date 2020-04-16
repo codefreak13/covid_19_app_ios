@@ -6,7 +6,7 @@ import {
   Picker,
   ScrollView,
   KeyboardAvoidingView,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
@@ -14,6 +14,8 @@ import {Formik} from 'formik';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import ShowMessage, {type} from '../toster/ShowMessage';
+import RNPickerSelect from 'react-native-picker-select';
+import Icon from '../assets/downArrow.svg';
 
 class Covid extends React.Component {
   state = {
@@ -29,7 +31,7 @@ class Covid extends React.Component {
         initialValues={{
           covid: 'No',
         }}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           const token = await AsyncStorage.getItem('token');
           this.setState({loading: true});
           if (values.covid == 'No') {
@@ -50,17 +52,14 @@ class Covid extends React.Component {
               let err = e.message.split(' ');
               err.shift();
               ShowMessage(type.ERROR, err.join(' '));
-              console.log(err.join(' '));
+              console.log(e);
             }
           } else {
             try {
-              await firestore()
-                .collection('users')
-                .doc(token)
-                .update({
-                  'covid19_status.has_been_tested_for_COVID19': values.covid,
-                  updated_at: new Date(),
-                });
+              await firestore().collection('users').doc(token).update({
+                'covid19_status.has_been_tested_for_COVID19': values.covid,
+                updated_at: new Date(),
+              });
               this.setState({loading: false});
               this.props.navigation.navigate('Covid2');
             } catch (e) {
@@ -97,26 +96,29 @@ class Covid extends React.Component {
                   minimumValue={0}
                   step={1}
                   value={this.state.sliderValue}
-                  onValueChange={sliderValue => this.setState({sliderValue})}
+                  onValueChange={(sliderValue) => this.setState({sliderValue})}
                 />
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
                     Have you been tested for COVID-19?
                   </Text>
-                  <View style={styles.picker}>
-                    <Picker
-                      onChangeText={handleChange('covid')}
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.covid}
                       onBlur={handleBlur('covid')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('covid', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('covid', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                 </View>
-                <TouchableNativeFeedback onPress={handleSubmit}>
+                <TouchableWithoutFeedback onPress={handleSubmit}>
                   <View style={styles.signupbox}>
                     {this.state.loading ? (
                       <ActivityIndicator color="#fff" />
@@ -124,7 +126,7 @@ class Covid extends React.Component {
                       <Text style={styles.signuptext}>Next</Text>
                     )}
                   </View>
-                </TouchableNativeFeedback>
+                </TouchableWithoutFeedback>
               </View>
             </ScrollView>
           </KeyboardAvoidingView>
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginHorizontal: 30,
-    marginVertical: 46,
+    marginVertical: 50,
   },
   head: {
     color: '#333333',
@@ -149,14 +151,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 18,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     marginTop: 6,
     lineHeight: 29,
     textAlign: 'center',
     width: '90%',
   },
   slider: {
-    width: '110%',
+    width: '100%',
   },
   picker: {
     width: '100%',
@@ -164,7 +166,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 0.8,
     borderColor: '#DADADA',
-    color: '#979797',
   },
   section: {
     width: '100%',
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     color: '#373C3C',
     fontSize: 14,
     lineHeight: 17,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     fontStyle: 'normal',
     fontWeight: '500',
   },
@@ -194,9 +195,40 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
+    fontStyle: 'normal',
+  },
+  rnPicker: {
+    width: '100%',
+    paddingHorizontal: 20,
+    borderRadius: 4,
+    borderWidth: 0.8,
+    borderColor: '#DADADA',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 14,
+    paddingVertical: 20,
+    paddingRight: 30,
+    lineHeight: 17,
+    fontFamily: 'Helvetica Neue',
+    color: '#323232',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+  },
+  iconContainer: {
+    marginVertical: 25,
+  },
+  placeholder: {
+    color: '#323232',
+    fontSize: 14,
+    lineHeight: 17,
+    fontFamily: 'Helvetica Neue',
+    fontWeight: 'normal',
     fontStyle: 'normal',
   },
 });

@@ -5,7 +5,6 @@ import {
   Text,
   View,
   TextInput,
-  TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
   TouchableWithoutFeedback,
@@ -31,24 +30,14 @@ export default class CreateAccount extends React.Component {
   static navigationOptions = {headerShown: false};
 
   toggleSwitch = () => {
-    this.setState(prevState => ({showPassword: !prevState.showPassword}));
+    this.setState((prevState) => ({showPassword: !prevState.showPassword}));
   };
 
   render() {
     const validationSchema = yup.object().shape({
-      email: yup
-        .string()
-        .required()
-        .email(),
-      password: yup
-        .string()
-        .required()
-        .min(6),
+      email: yup.string().required().email(),
+      password: yup.string().required().min(6),
       name: yup.string().required(),
-      phoneNumber: yup
-        .number()
-        .required()
-        .min(11),
     });
     return (
       <Formik
@@ -58,7 +47,7 @@ export default class CreateAccount extends React.Component {
           phoneNumber: '',
           password: '',
         }}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           this.setState({loading: true});
           try {
             const register = await auth().createUserWithEmailAndPassword(
@@ -67,15 +56,12 @@ export default class CreateAccount extends React.Component {
             );
             if (register.user) {
               const {user} = register;
-              await firestore()
-                .collection('users')
-                .doc(user.uid)
-                .set({
-                  full_name: values.name,
-                  email: values.email.toLowerCase(),
-                  phone_number: values.phoneNumber,
-                  created_at: new Date(),
-                });
+              await firestore().collection('users').doc(user.uid).set({
+                display_name: values.name,
+                email: values.email.toLowerCase(),
+                phone_number: values.phoneNumber,
+                created_at: new Date(),
+              });
               const token = user.uid;
               await AsyncStorage.setItem('token', token);
               this.setState({loading: false});
@@ -126,12 +112,12 @@ export default class CreateAccount extends React.Component {
                       value={values.name}
                       onChangeText={handleChange('name')}
                       onBlur={handleBlur('name')}
-                      placeholder="Full name"
+                      placeholder="User name"
                       name="name"
                     />
                     {touched.name && errors.name && (
                       <Text style={{fontSize: 10, color: 'red'}}>
-                        {errors.name}
+                        {'Please enter a username'}
                       </Text>
                     )}
                   </View>
@@ -148,7 +134,7 @@ export default class CreateAccount extends React.Component {
                     />
                     {touched.email && errors.email && (
                       <Text style={{fontSize: 10, color: 'red'}}>
-                        {errors.email}
+                        {'Please enter a valid email'}
                       </Text>
                     )}
                   </View>
@@ -160,14 +146,9 @@ export default class CreateAccount extends React.Component {
                       value={values.phoneNumber}
                       onChangeText={handleChange('phoneNumber')}
                       onBlur={handleBlur('phoneNumber')}
-                      placeholder="Phone number"
+                      placeholder="Phone number(Optional)"
                       name="phoneNumber"
                     />
-                    {touched.phoneNumber && errors.phoneNumber && (
-                      <Text style={{fontSize: 10, color: 'red'}}>
-                        {errors.phoneNumber}
-                      </Text>
-                    )}
                   </View>
                   <View style={styles.inputDiv}>
                     <View style={styles.passwordMenu}>
@@ -202,12 +183,12 @@ export default class CreateAccount extends React.Component {
                     </View>
                     {touched.password && errors.password && (
                       <Text style={{fontSize: 10, color: 'red'}}>
-                        {errors.password}
+                        {'Please enter a password'}
                       </Text>
                     )}
                   </View>
                   <View>
-                    <TouchableNativeFeedback onPress={handleSubmit}>
+                    <TouchableWithoutFeedback onPress={handleSubmit}>
                       <View style={styles.signupbox}>
                         {this.state.loading ? (
                           <ActivityIndicator color="#fff" />
@@ -215,7 +196,7 @@ export default class CreateAccount extends React.Component {
                           <Text style={styles.signuptext}>Create account</Text>
                         )}
                       </View>
-                    </TouchableNativeFeedback>
+                    </TouchableWithoutFeedback>
                   </View>
                   <View style={styles.footTextDiv}>
                     <Text style={(styles.footText, {marginRight: 10})}>
@@ -271,10 +252,7 @@ const styles = StyleSheet.create({
     padding: 7,
     paddingHorizontal: 10,
     width: '100%',
-  },
-  input1: {
-    width: '70%',
-    color: 'white',
+    paddingVertical: 20,
   },
   input: {
     color: '#1D1C1C',
@@ -284,6 +262,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     padding: 15,
     width: '100%',
+    paddingVertical: 20,
   },
   inputDiv: {
     marginBottom: 20,
@@ -294,13 +273,13 @@ const styles = StyleSheet.create({
     fontSize: 36,
     marginBottom: 25,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 43,
   },
   subText: {
     color: '#000000',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 18,
   },
   signupbox: {
@@ -317,7 +296,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',

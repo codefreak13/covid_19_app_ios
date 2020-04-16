@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableNativeFeedback,
-  Linking,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import Icon from '../assets/feelings.svg';
 
 class Feelings extends React.Component {
@@ -17,18 +10,18 @@ class Feelings extends React.Component {
       <View style={styles.container}>
         <Icon style={styles.icon} />
         <Text style={styles.head}>How do you feel today?</Text>
-        <TouchableNativeFeedback
+        <TouchableWithoutFeedback
           onPress={() => this.props.navigation.navigate('Final')}>
           <View style={styles.signupbox}>
-            <Text style={styles.signuptext}>I feel great</Text>
+            <Text style={styles.signuptext}>I feel great!</Text>
           </View>
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
           onPress={() => this.props.navigation.navigate('Symptoms')}>
           <View style={styles.signupbox}>
             <Text style={styles.signuptext}>I feel sick</Text>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
@@ -42,7 +35,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     flexDirection: 'column',
-    paddingVertical: 65,
+    paddingVertical: 100,
     justifyContent: 'flex-start',
   },
   icon: {
@@ -54,7 +47,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 24,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 29,
     marginBottom: 24,
     alignSelf: 'center',
@@ -73,7 +66,7 @@ const styles = StyleSheet.create({
     color: '#595959',
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',

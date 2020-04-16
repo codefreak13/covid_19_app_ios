@@ -1,11 +1,9 @@
 import React from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  TouchableNativeFeedback,
   ScrollView,
   KeyboardAvoidingView,
   ActivityIndicator,
@@ -27,17 +25,14 @@ export default class ForgotPassword extends React.Component {
 
   render() {
     const validationSchema = yup.object().shape({
-      email: yup
-        .string()
-        .required()
-        .email(),
+      email: yup.string().required().email(),
     });
     return (
       <Formik
         initialValues={{
           email: '',
         }}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           this.setState({loading: true});
           try {
             await auth().sendPasswordResetEmail(values.email.toLowerCase());
@@ -104,7 +99,7 @@ export default class ForgotPassword extends React.Component {
                     )}
                   </View>
                   <View>
-                    <TouchableNativeFeedback onPress={handleSubmit}>
+                    <TouchableWithoutFeedback onPress={handleSubmit}>
                       <View style={styles.signupbox}>
                         {this.state.loading ? (
                           <ActivityIndicator color="#fff" />
@@ -112,7 +107,7 @@ export default class ForgotPassword extends React.Component {
                           <Text style={styles.signuptext}>Reset</Text>
                         )}
                       </View>
-                    </TouchableNativeFeedback>
+                    </TouchableWithoutFeedback>
                   </View>
                 </View>
               </View>
@@ -132,7 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     width: '85%',
-    paddingVertical: 50,
+    paddingVertical: 70,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     marginLeft: 27,
@@ -160,14 +155,14 @@ const styles = StyleSheet.create({
     fontSize: 36,
     marginBottom: 25,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     marginTop: 81,
     lineHeight: 43,
   },
   subText: {
     color: '#000000',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 18,
   },
   signupbox: {
@@ -184,7 +179,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',

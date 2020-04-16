@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   TextInput,
   ActivityIndicator,
 } from 'react-native';
@@ -96,12 +96,12 @@ class Treatment extends React.Component {
                       onBlur={handleBlur('optional')}
                       name="optional"
                       multiline={true}
-                      numberOfLines={6}
-                      style={{textAlignVertical: 'top'}}
+                      numberOfLines={20}
+                      style={{textAlignVertical: 'top',minHeight: 150, height: 'auto'}}
                     />
                   </View>
                 </View>
-                <TouchableNativeFeedback onPress={handleSubmit}>
+                <TouchableWithoutFeedback onPress={handleSubmit}>
                   <View style={styles.signupbox}>
                     {this.state.loading ? (
                       <ActivityIndicator color="#fff" />
@@ -109,7 +109,7 @@ class Treatment extends React.Component {
                       <Text style={styles.signuptext}>Done</Text>
                     )}
                   </View>
-                </TouchableNativeFeedback>
+                </TouchableWithoutFeedback>
               </View>
             </ScrollView>
           </KeyboardAvoidingView>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 18,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     marginTop: 6,
     lineHeight: 29,
     textAlign: 'center',
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#DADADA',
     paddingVertical: 10,
+    color: '#323232',
   },
   section: {
     width: '100%',
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     color: '#373C3C',
     fontSize: 14,
     lineHeight: 17,
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     fontStyle: 'normal',
     fontWeight: '500',
   },
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',

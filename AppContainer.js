@@ -19,6 +19,7 @@ import TalkToADoctor from './src/components/TalkToADoctor';
 import Terms from './src/components/Terms';
 import Treatment from './src/components/Treatment';
 import Treatment2 from './src/components/Treatment2';
+import Share from './src/components/Share';
 
 const AppNavigator = createStackNavigator(
   {
@@ -35,8 +36,9 @@ const AppNavigator = createStackNavigator(
     TalkToADoctor,
     Treatment,
     Treatment2,
+    Share,
   },
-  {initialRouteName: 'Basic'},
+  {initialRouteName: 'ReturningScreen'},
 );
 
 // const AppContainer = createAppContainer(AppNavigator);

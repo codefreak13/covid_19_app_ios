@@ -3,8 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableNativeFeedback,
   TouchableWithoutFeedback,
+  Linking,
 } from 'react-native';
 import Icon from '../assets/health-icon.svg';
 import Arrow from '../assets/right-arrow.svg';
@@ -19,7 +19,13 @@ class Splash extends React.Component {
       <View style={styles.container}>
         <TopBackground style={styles.topBackground} />
         <RightBackground style={styles.rightBackground} />
-        <Text style={styles.head}>Symptom checker COVID-19 </Text>
+        <View
+          style={{
+            marginBottom: 18,
+          }}>
+          <Text style={styles.head}>COVID-19 </Text>
+          <Text style={[styles.head, {paddingLeft: -10}]}>Symptom checker</Text>
+        </View>
         <Text style={styles.title}>
           Carry out a daily self-report, help identify high-risk areas and track
           how fast the virus is spreading.
@@ -30,17 +36,22 @@ class Splash extends React.Component {
           style={{alignSelf: 'center', marginVertical: 20}}
         />
         <Text style={styles.bodyText}>
-          This app allows you track if you have Covid-19, but does not give
-          health advice. If you need advice please visit WHO website or speak to
-          a doctor.
+          This app allows you track if you have COVID-19, but does not give
+          health advice. If you need advice please visit{' '}
+          <Text
+            style={{textDecorationLine: 'underline'}}
+            onPress={() => Linking.openURL('https://www.who.int')}>
+            WHO{' '}
+          </Text>
+          website or talk to a doctor.
         </Text>
-        <TouchableNativeFeedback
+        <TouchableWithoutFeedback
           onPress={() => this.props.navigation.navigate('CreateAccount')}>
           <View style={styles.signupbox}>
             <Text style={styles.signuptext}>Get Started</Text>
             <Arrow />
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => this.props.navigation.navigate('Login')}>
           <View
@@ -59,12 +70,6 @@ class Splash extends React.Component {
 export default Splash;
 
 const styles = StyleSheet.create({
-  imageBackgroundStyle: {
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-  },
   rightBackground: {
     position: 'absolute',
     right: 0,
@@ -81,22 +86,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     flexDirection: 'column',
     justifyContent: 'space-around',
-    paddingVertical: 20,
+    paddingVertical: 30,
   },
   head: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 30,
-    marginBottom: 18,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     lineHeight: 36,
-    width: '90%',
   },
   title: {
     fontWeight: 'normal',
     fontSize: 16,
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 19,
     fontStyle: 'normal',
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',
@@ -128,7 +131,7 @@ const styles = StyleSheet.create({
     color: '#595959',
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',
@@ -138,7 +141,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',

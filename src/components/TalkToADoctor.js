@@ -5,7 +5,6 @@ import {
   Text,
   View,
   TextInput,
-  TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
   TouchableWithoutFeedback,
@@ -67,7 +66,7 @@ export default class TalkToADoctor extends React.Component {
                   appointmentTime: '',
                   appointmentReason: '',
                 }}
-                onSubmit={values => {
+                onSubmit={(values) => {
                   AsyncStorage.clear();
                   this.props.navigation.navigate('CreateAccount');
                 }}
@@ -134,12 +133,12 @@ export default class TalkToADoctor extends React.Component {
                           <Picker.Item
                             label="Appointment time"
                             value="Abia"
-                            color="#979797"
+                            color="#323232"
                           />
                           <Picker.Item
                             label="12am"
                             value="12"
-                            color="#979797"
+                            color="#323232"
                           />
                         </Picker>
                       </View>
@@ -174,13 +173,13 @@ export default class TalkToADoctor extends React.Component {
                         )}
                     </View>
                     <View>
-                      <TouchableNativeFeedback onPress={handleSubmit}>
+                      <TouchableWithoutFeedback onPress={handleSubmit}>
                         <View style={styles.signupbox}>
                           <Text style={styles.signuptext}>
                             Talk to a doctor
                           </Text>
                         </View>
-                      </TouchableNativeFeedback>
+                      </TouchableWithoutFeedback>
                     </View>
                   </View>
                 )}
@@ -243,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 17,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 43,
     textAlign: 'center',
     marginTop: 21.7,
@@ -262,6 +261,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     paddingHorizontal: 19,
     paddingVertical: 16,
+    color: '#323232',
   },
   inputDiv: {
     marginBottom: 20,
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   subText: {
     color: '#000000',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 17,
     width: '90%',
     alignSelf: 'center',
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   subText2: {
     color: '#000000',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 17,
     width: '94.2%',
     textAlign: 'center',
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginTop: 17,
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 17,
     width: '90%',
     textAlign: 'center',
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 14,
     textAlign: 'center',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     color: '#595959',
   },
   footButtonDiv: {
@@ -336,13 +336,13 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     fontSize: 14,
     fontWeight: '500',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
   },
   footNote: {
     color: '#000',
     fontSize: 14,
     lineHeight: 40,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     marginTop: 40,
   },
   error: {

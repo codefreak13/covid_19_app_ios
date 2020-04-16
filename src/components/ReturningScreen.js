@@ -1,9 +1,15 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableNativeFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Linking,
+} from 'react-native';
 import Icon from '../assets/health-icon.svg';
-import Arrow from '../assets/right-arrow.svg';
 import TopBackground from '../assets/top-background.svg';
 import RightBackground from '../assets/right-background.svg';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class ReturningScreen extends React.Component {
   static navigationOptions = {headerShown: false};
@@ -13,23 +19,34 @@ class ReturningScreen extends React.Component {
       <View style={styles.container}>
         <TopBackground style={styles.topBackground} />
         <RightBackground style={styles.rightBackground} />
-        <Text style={styles.head}>Symptom checker COVID-19 </Text>
+        <View
+          style={{
+            marginBottom: 18,
+          }}>
+          <Text style={styles.head}>COVID-19 </Text>
+          <Text style={[styles.head, {paddingLeft: -10}]}>Symptom checker</Text>
+        </View>
         <Text style={styles.title}>
           Carry out a daily self-report, help identify high-risk areas and track
           how fast the virus is spreading.
         </Text>
-        <Icon />
+        <Icon style={{alignSelf: 'center', marginVertical: 10}} />
         <Text style={styles.bodyText}>
-          This app allows you track if you have Covid-19, but does not give
-          health advice. If you need advice please visit WHO website or speak to
-          a doctor.
+          This app allows you track if you have COVID-19, but does not give
+          health advice. If you need advice please visit{' '}
+          <Text
+            style={{textDecorationLine: 'underline'}}
+            onPress={() => Linking.openURL('https://www.who.int')}>
+            WHO{' '}
+          </Text>
+          website or talk to a doctor.
         </Text>
-        <TouchableNativeFeedback
+        <TouchableWithoutFeedback
           onPress={() => this.props.navigation.navigate('Covid')}>
           <View style={styles.signupbox}>
             <Text style={styles.signuptext}>Track Symptoms</Text>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
@@ -38,12 +55,6 @@ class ReturningScreen extends React.Component {
 export default ReturningScreen;
 
 const styles = StyleSheet.create({
-  imageBackgroundStyle: {
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-  },
   rightBackground: {
     position: 'absolute',
     right: 0,
@@ -55,26 +66,25 @@ const styles = StyleSheet.create({
     top: 0,
   },
   container: {
+    justifyContent: 'space-around',
     backgroundColor: '#564FF5',
     flex: 1,
     paddingHorizontal: 30,
     flexDirection: 'column',
-    justifyContent: 'center',
+    paddingVertical: 30,
   },
   head: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 30,
-    marginBottom: 18,
-    fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
     lineHeight: 36,
-    width: '90%',
+    fontStyle: 'normal',
+    fontFamily: 'Helvetica Neue',
   },
   title: {
     fontWeight: 'normal',
     fontSize: 16,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 19,
     fontStyle: 'normal',
@@ -85,7 +95,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',
@@ -105,7 +115,7 @@ const styles = StyleSheet.create({
     color: '#595959',
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',

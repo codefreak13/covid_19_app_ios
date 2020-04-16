@@ -3,9 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableNativeFeedback,
-  Linking,
   TouchableWithoutFeedback,
+  Linking,
 } from 'react-native';
 import Icon from '../assets/thanks.svg';
 
@@ -16,28 +15,36 @@ class Final extends React.Component {
     return (
       <View style={styles.container}>
         <Icon style={styles.icon} />
-        <Text style={styles.title}>
-          Thank you for your help and contribution in the study of
-          Covid-19.Please share this app. The more people report their symptoms,
-          the more we can help those at risk. If you need advice ,please visit{' '}
-          <Text
-            style={{textDecorationLine: 'underline'}}
-            onPress={() => Linking.openURL('https://www.who.int')}>
-            WHO website
-          </Text>{' '}
-          or talk to a doctor
+        <Text style={[styles.title, {marginBottom: 5}]}>
+          Thank you for your help and contribution in the study of COVID-19.
         </Text>
-        <TouchableNativeFeedback>
+        <Text style={[styles.title, {marginBottom: 5}]}>
+          Check back tomorrow and self-report your symptoms, even if you feel
+          well. Please share this app. The more people report their symptoms,
+          the more we can help those at risk. Please share this app. The more
+          people report their symptoms, the more we can help those at risk.
+        </Text>
+        <Text style={styles.title}>
+          If you need advice please visit{' '}
+          <Text
+            style={{textDecorationLine: 'underline', color: 'yellow'}}
+            onPress={() => Linking.openURL('https://www.who.int')}>
+            WHO{' '}
+          </Text>
+          website or talk to a doctor.
+        </Text>
+        <TouchableWithoutFeedback
+          onPress={() => this.props.navigation.navigate('Share')}>
           <View style={styles.signupbox}>
             <Text style={styles.signuptext}>Share app</Text>
           </View>
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback
-          onPress={() => this.props.navigation.navigate('TalkToADoctor')}>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => Linking.openURL('https://www.Aeglehealth.io')}>
           <View style={styles.signupbox1}>
             <Text style={styles.signuptext1}>Talk to a doctor</Text>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => this.props.navigation.navigate('ReturningScreen')}>
           <View style={styles.done}>
@@ -57,7 +64,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 30,
     flexDirection: 'column',
-    justifyContent: 'center',
     paddingVertical: 65,
   },
   icon: {
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 17,
     fontStyle: 'normal',
     color: '#fff',
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
     color: '#595959',
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',
@@ -109,7 +115,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',
