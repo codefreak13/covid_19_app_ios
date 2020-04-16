@@ -235,7 +235,7 @@ class Basic extends React.Component {
                   value={this.state.contact}
                   placeholder={{label: 'No', value: 'No'}}
                   items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
-                  style={{...pickerSelectStyles}}
+                  style={{...pickerSelectStyles1}}
                 />
               </View>
             </View>
@@ -251,7 +251,7 @@ class Basic extends React.Component {
                   placeholder={{label: 'Choose country', value: ' '}}
                   items={countries.map((country) => {
                     return {
-                      key: {country},
+                      // key: country,
                       label: country,
                       value: country,
                       color: '#323232',
@@ -276,7 +276,7 @@ class Basic extends React.Component {
                     this.state.states &&
                     this.state.states.map((state) => {
                       return {
-                        key: state.name,
+                        // key: state.name,
                         label: state.name,
                         value: state.name,
                         color: '#323232',

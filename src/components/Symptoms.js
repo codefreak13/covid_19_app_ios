@@ -605,7 +605,7 @@ const pickerSelectStyles = StyleSheet.create({
     marginVertical: 25,
   },
   placeholder: {
-    color: '#979797',
+    color: '#323232',
     fontSize: 14,
     lineHeight: 17,
     fontFamily: 'Helvetica Neue',

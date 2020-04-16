@@ -77,8 +77,9 @@ export default ShareExample;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    marginHorizontal: 30,
-    marginVertical: 65,
+    paddingHorizontal: 30,
+    paddingVertical: 65,
+    backgroundColor: '#fff',
   },
   signupbox: {
     backgroundColor: '#564FF5',

@@ -65,6 +65,7 @@ export default class Login extends React.Component {
             let err = e.message.split(' ');
             err.shift();
             ShowMessage(type.ERROR, err.join(' '));
+            console.log(e);
           }
         }}
         validationSchema={validationSchema}>
