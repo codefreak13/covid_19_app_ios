@@ -1,38 +1,37 @@
-import React from "react";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import React from 'react';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
-} from "react-native";
-import * as yup from "yup";
-import { Formik } from "formik";
-import ShowMessage, { type } from "../toster/ShowMessage";
-import firestore from "@react-native-firebase/firestore";
-import auth from "@react-native-firebase/auth";
-import AsyncStorage from "@react-native-community/async-storage";
-import RNPickerSelect from "react-native-picker-select";
+} from 'react-native';
+import * as yup from 'yup';
+import {Formik} from 'formik';
+import ShowMessage, {type} from '../toster/ShowMessage';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-community/async-storage';
+import RNPickerSelect from 'react-native-picker-select';
 
 export default class CreateAccount extends React.Component {
   state = {
     loading: false,
     showPassword: true,
-    email: "",
-    name: "",
-    phoneNumber: "",
-    password: "",
+    email: '',
+    name: '',
+    phoneNumber: '',
+    password: '',
   };
 
-  static navigationOptions = { headerShown: false };
+  static navigationOptions = {headerShown: false};
 
   toggleSwitch = () => {
-    this.setState((prevState) => ({ showPassword: !prevState.showPassword }));
+    this.setState((prevState) => ({showPassword: !prevState.showPassword}));
   };
 
   render() {
@@ -44,42 +43,41 @@ export default class CreateAccount extends React.Component {
     return (
       <Formik
         initialValues={{
-          email: "",
-          name: "",
-          phoneNumber: "",
-          password: "",
+          email: '',
+          name: '',
+          phoneNumber: '',
+          password: '',
         }}
         onSubmit={async (values) => {
-          this.setState({ loading: true });
+          this.setState({loading: true});
           try {
             const register = await auth().createUserWithEmailAndPassword(
               values.email,
-              values.password
+              values.password,
             );
             if (register.user) {
-              const { user } = register;
-              await firestore().collection("users").doc(user.uid).set({
+              const {user} = register;
+              await firestore().collection('users').doc(user.uid).set({
                 display_name: values.name,
                 email: values.email.toLowerCase(),
                 phone_number: values.phoneNumber,
                 created_at: new Date(),
               });
               const token = user.uid;
-              await AsyncStorage.setItem("token", token);
-              this.setState({ loading: false });
-              ShowMessage(type.DONE, "Successfuly Registered");
-              this.props.navigation.navigate("Terms");
+              await AsyncStorage.setItem('token', token);
+              this.setState({loading: false});
+              ShowMessage(type.DONE, 'Successfuly Registered');
+              this.props.navigation.navigate('Terms');
             }
           } catch (e) {
-            this.setState({ loading: false });
-            let err = e.message.split(" ");
+            this.setState({loading: false});
+            let err = e.message.split(' ');
             err.shift();
-            ShowMessage(type.ERROR, err.join(" "));
-            console.log(err.join(" "));
+            ShowMessage(type.ERROR, err.join(' '));
+            console.log(err.join(' '));
           }
         }}
-        validationSchema={validationSchema}
-      >
+        validationSchema={validationSchema}>
         {({
           values,
           handleChange,
@@ -91,11 +89,10 @@ export default class CreateAccount extends React.Component {
           handleBlur,
           handleSubmit,
         }) => (
-          <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#fff" }}>
+          <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#fff'}}>
             <ScrollView
-              contentContainerStyle={{ flexGrow: 1 }}
-              keyboardShouldPersistTaps={"handled"}
-            >
+              contentContainerStyle={{flexGrow: 1}}
+              keyboardShouldPersistTaps={'handled'}>
               <View style={styles.container}>
                 <View>
                   <Text style={styles.head}>Create account</Text>
@@ -107,21 +104,20 @@ export default class CreateAccount extends React.Component {
                 <View
                   style={{
                     marginTop: 46,
-                  }}
-                >
+                  }}>
                   <View style={styles.inputDiv}>
                     <TextInput
                       keyboardType="default"
                       style={styles.input}
                       placeholderTextColor="#979797"
                       value={values.name}
-                      onChangeText={handleChange("name")}
-                      onBlur={handleBlur("name")}
+                      onChangeText={handleChange('name')}
+                      onBlur={handleBlur('name')}
                       placeholder="User name"
                       name="name"
                     />
                     {touched.name && errors.name && (
-                      <Text style={{ fontSize: 10, color: "red" }}>
+                      <Text style={{fontSize: 10, color: 'red'}}>
                         {errors.name}
                       </Text>
                     )}
@@ -132,13 +128,13 @@ export default class CreateAccount extends React.Component {
                       style={styles.input}
                       placeholderTextColor="#979797"
                       value={values.email}
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
+                      onChangeText={handleChange('email')}
+                      onBlur={handleBlur('email')}
                       placeholder="Email"
                       name="email"
                     />
                     {touched.email && errors.email && (
-                      <Text style={{ fontSize: 10, color: "red" }}>
+                      <Text style={{fontSize: 10, color: 'red'}}>
                         {errors.email}
                       </Text>
                     )}
@@ -149,8 +145,8 @@ export default class CreateAccount extends React.Component {
                       style={styles.input}
                       placeholderTextColor="#979797"
                       value={values.phoneNumber}
-                      onChangeText={handleChange("phoneNumber")}
-                      onBlur={handleBlur("phoneNumber")}
+                      onChangeText={handleChange('phoneNumber')}
+                      onBlur={handleBlur('phoneNumber')}
                       placeholder="Phone number(Optional)"
                       name="phoneNumber"
                     />
@@ -161,11 +157,11 @@ export default class CreateAccount extends React.Component {
                         keyboardType="default"
                         placeholderTextColor="#979797"
                         value={values.password}
-                        onChangeText={handleChange("password")}
-                        onBlur={handleBlur("password")}
+                        onChangeText={handleChange('password')}
+                        onBlur={handleBlur('password')}
                         placeholder="Password"
                         name="password"
-                        style={{ width: "90%" }}
+                        style={{width: '90%'}}
                         secureTextEntry={this.state.showPassword}
                       />
                       <TouchableWithoutFeedback onPress={this.toggleSwitch}>
@@ -187,13 +183,13 @@ export default class CreateAccount extends React.Component {
                       </TouchableWithoutFeedback>
                     </View>
                     {touched.password && errors.password && (
-                      <Text style={{ fontSize: 10, color: "red" }}>
+                      <Text style={{fontSize: 10, color: 'red'}}>
                         {errors.password}
                       </Text>
                     )}
                   </View>
                   <View>
-                    <TouchableNativeFeedback onPress={handleSubmit}>
+                    <TouchableWithoutFeedback onPress={handleSubmit}>
                       <View style={styles.signupbox}>
                         {this.state.loading ? (
                           <ActivityIndicator color="#fff" />
@@ -201,24 +197,22 @@ export default class CreateAccount extends React.Component {
                           <Text style={styles.signuptext}>Create account</Text>
                         )}
                       </View>
-                    </TouchableNativeFeedback>
+                    </TouchableWithoutFeedback>
                   </View>
                   <View style={styles.footTextDiv}>
-                    <Text style={(styles.footText, { marginRight: 10 })}>
+                    <Text style={(styles.footText, {marginRight: 10})}>
                       Already have an account?
                     </Text>
                     <TouchableWithoutFeedback
-                      onPress={() => this.props.navigation.navigate("Login")}
-                    >
+                      onPress={() => this.props.navigation.navigate('Login')}>
                       <View>
                         <Text
                           style={
                             (styles.footText,
                             {
-                              color: "#564FF5",
+                              color: '#564FF5',
                             })
-                          }
-                        >
+                          }>
                           Log in
                         </Text>
                       </View>
@@ -240,95 +234,95 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignSelf: "center",
-    width: "85%",
+    alignSelf: 'center',
+    width: '85%',
     paddingVertical: 30,
-    flexDirection: "column",
-    justifyContent: "center",
+    flexDirection: 'column',
+    justifyContent: 'center',
     marginLeft: 27,
     marginRight: 27,
   },
   passwordMenu: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     borderWidth: 0.8,
-    borderColor: "#DADADA",
+    borderColor: '#DADADA',
     borderRadius: 4,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     padding: 7,
     paddingHorizontal: 10,
-    width: "100%",
+    width: '100%',
   },
   input1: {
-    width: "70%",
-    color: "white",
+    width: '70%',
+    color: 'white',
   },
   input: {
-    color: "#1D1C1C",
+    color: '#1D1C1C',
     borderWidth: 0.8,
-    borderColor: "#DADADA",
+    borderColor: '#DADADA',
     borderRadius: 4,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     padding: 15,
-    width: "100%",
+    width: '100%',
   },
   inputDiv: {
     marginBottom: 20,
   },
   head: {
-    color: "#333333",
-    fontWeight: "bold",
+    color: '#333333',
+    fontWeight: 'bold',
     fontSize: 36,
     marginBottom: 25,
-    fontStyle: "normal",
-    fontFamily: "SF Pro Display",
+    fontStyle: 'normal',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 43,
   },
   subText: {
-    color: "#000000",
+    color: '#000000',
     fontSize: 15,
-    fontFamily: "SF Pro Display",
+    fontFamily: 'Helvetica Neue',
     lineHeight: 18,
   },
   signupbox: {
-    backgroundColor: "#564FF5",
+    backgroundColor: '#564FF5',
     height: 48,
-    width: "100%",
-    alignSelf: "center",
+    width: '100%',
+    alignSelf: 'center',
     borderRadius: 4,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 22,
   },
   signuptext: {
-    color: "white",
-    fontWeight: "600",
+    color: 'white',
+    fontWeight: '600',
     fontSize: 15,
-    fontFamily: "SF Pro Display",
-    alignSelf: "center",
+    fontFamily: 'Helvetica Neue',
+    alignSelf: 'center',
     lineHeight: 18,
-    fontStyle: "normal",
+    fontStyle: 'normal',
   },
   alreadyhaveanaccount: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 10,
   },
   opacity: {
-    textAlign: "center",
-    color: "yellow",
+    textAlign: 'center',
+    color: 'yellow',
     fontSize: 14,
   },
   footTextDiv: {
-    flexDirection: "row",
-    alignSelf: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
     marginTop: 27,
   },
   footText: {
-    fontWeight: "normal",
+    fontWeight: 'normal',
     fontSize: 14,
     lineHeight: 17,
   },

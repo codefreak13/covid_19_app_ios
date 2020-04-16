@@ -3,7 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
@@ -28,15 +28,12 @@ class Location extends React.Component {
     const token = await AsyncStorage.getItem('token');
     this.setState({loading1: true});
     try {
-      await firestore()
-        .collection('users')
-        .doc(token)
-        .update({
-          'location.details':
-            'I’m at home. I haven’t been to the hospital for suspected COVID-19 symptoms',
-          'location.location': 'At home',
-          updated_at: new Date(),
-        });
+      await firestore().collection('users').doc(token).update({
+        'location.details':
+          'I’m at home. I haven’t been to the hospital for suspected COVID-19 symptoms',
+        'location.location': 'At home',
+        updated_at: new Date(),
+      });
       this.setState({loading1: false});
       this.props.navigation.navigate('Final');
     } catch (e) {
@@ -52,15 +49,12 @@ class Location extends React.Component {
     const token = await AsyncStorage.getItem('token');
     this.setState({loading2: true});
     try {
-      await firestore()
-        .collection('users')
-        .doc(token)
-        .update({
-          'location.details':
-            'I am at the hospital with suspected COVID-19 symptoms.',
-          'location.location': 'At the hospital',
-          updated_at: new Date(),
-        });
+      await firestore().collection('users').doc(token).update({
+        'location.details':
+          'I am at the hospital with suspected COVID-19 symptoms.',
+        'location.location': 'At the hospital',
+        updated_at: new Date(),
+      });
       this.setState({loading2: false});
       this.props.navigation.navigate('Treatment');
     } catch (e) {
@@ -76,15 +70,12 @@ class Location extends React.Component {
     const token = await AsyncStorage.getItem('token');
     this.setState({loading3: true});
     try {
-      await firestore()
-        .collection('users')
-        .doc(token)
-        .update({
-          'location.details':
-            'I’m back from the hospital, I’d like to tell you about my treatment',
-          'location.location': 'Back from hospital',
-          updated_at: new Date(),
-        });
+      await firestore().collection('users').doc(token).update({
+        'location.details':
+          'I’m back from the hospital, I’d like to tell you about my treatment',
+        'location.location': 'Back from hospital',
+        updated_at: new Date(),
+      });
       this.setState({loading3: false});
       this.props.navigation.navigate('Treatment');
     } catch (e) {
@@ -100,14 +91,11 @@ class Location extends React.Component {
     const token = await AsyncStorage.getItem('token');
     this.setState({loading4: true});
     try {
-      await firestore()
-        .collection('users')
-        .doc(token)
-        .update({
-          'location.details': 'I’ve already told you about my treatment',
-          'location.location': 'Back from hospital',
-          updated_at: new Date(),
-        });
+      await firestore().collection('users').doc(token).update({
+        'location.details': 'I’ve already told you about my treatment',
+        'location.location': 'Back from hospital',
+        updated_at: new Date(),
+      });
       this.setState({loading4: false});
       this.props.navigation.navigate('Final');
     } catch (e) {
@@ -134,7 +122,7 @@ class Location extends React.Component {
             minimumValue={0}
             step={1}
             value={this.state.sliderValue}
-            onValueChange={sliderValue => this.setState({sliderValue})}
+            onValueChange={(sliderValue) => this.setState({sliderValue})}
           />
           <View style={styles.cardContainer}>
             <View style={styles.card}>
@@ -146,11 +134,11 @@ class Location extends React.Component {
               {this.state.loading1 ? (
                 <ActivityIndicator color="#564FF5" />
               ) : (
-                <TouchableNativeFeedback onPress={this.handleSubmit1}>
+                <TouchableWithoutFeedback onPress={this.handleSubmit1}>
                   <View style={styles.signupbox}>
                     <Arrow height={7} width={11} />
                   </View>
-                </TouchableNativeFeedback>
+                </TouchableWithoutFeedback>
               )}
             </View>
             <View style={styles.card}>
@@ -161,11 +149,11 @@ class Location extends React.Component {
               {this.state.loading2 ? (
                 <ActivityIndicator color="#564FF5" />
               ) : (
-                <TouchableNativeFeedback onPress={this.handleSubmit2}>
+                <TouchableWithoutFeedback onPress={this.handleSubmit2}>
                   <View style={styles.signupbox}>
                     <Arrow height={7} width={11} />
                   </View>
-                </TouchableNativeFeedback>
+                </TouchableWithoutFeedback>
               )}
             </View>
             <View style={styles.card}>
@@ -177,11 +165,11 @@ class Location extends React.Component {
               {this.state.loading3 ? (
                 <ActivityIndicator color="#564FF5" />
               ) : (
-                <TouchableNativeFeedback onPress={this.handleSubmit3}>
+                <TouchableWithoutFeedback onPress={this.handleSubmit3}>
                   <View style={styles.signupbox}>
                     <Arrow height={7} width={11} />
                   </View>
-                </TouchableNativeFeedback>
+                </TouchableWithoutFeedback>
               )}
             </View>
             <View style={styles.card}>
@@ -192,11 +180,11 @@ class Location extends React.Component {
               {this.state.loading4 ? (
                 <ActivityIndicator color="#564FF5" />
               ) : (
-                <TouchableNativeFeedback onPress={this.handleSubmit4}>
+                <TouchableWithoutFeedback onPress={this.handleSubmit4}>
                   <View style={styles.signupbox}>
                     <Arrow height={7} width={11} />
                   </View>
-                </TouchableNativeFeedback>
+                </TouchableWithoutFeedback>
               )}
             </View>
           </View>
@@ -221,14 +209,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 18,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     marginTop: 6,
     lineHeight: 29,
     textAlign: 'center',
     width: '90%',
   },
   slider: {
-    width: '110%',
+    width: '100%',
   },
   signupbox: {
     backgroundColor: '#564FF5',
@@ -263,7 +251,7 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontStyle: 'normal',
     fontWeight: 'bold',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     fontSize: 18,
     color: '#595959',
   },
@@ -273,7 +261,7 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     fontSize: 14,
     paddingVertical: 16,
   },

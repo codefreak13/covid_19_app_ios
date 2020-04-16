@@ -5,10 +5,9 @@ import {
   Text,
   View,
   TextInput,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   ScrollView,
   ActivityIndicator,
-  TouchableWithoutFeedback,
   KeyboardAvoidingView,
 } from 'react-native';
 import * as yup from 'yup';
@@ -29,19 +28,13 @@ export default class Login extends React.Component {
   static navigationOptions = {headerShown: false};
 
   toggleSwitch = () => {
-    this.setState(prevState => ({showPassword: !prevState.showPassword}));
+    this.setState((prevState) => ({showPassword: !prevState.showPassword}));
   };
 
   render() {
     const validationSchema = yup.object().shape({
-      email: yup
-        .string()
-        .required()
-        .email(),
-      password: yup
-        .string()
-        .required()
-        .min(6),
+      email: yup.string().required().email(),
+      password: yup.string().required().min(6),
     });
     return (
       <Formik
@@ -49,7 +42,7 @@ export default class Login extends React.Component {
           email: '',
           password: '',
         }}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           this.setState({loading: true});
           try {
             const login = await auth().signInWithEmailAndPassword(
@@ -156,7 +149,7 @@ export default class Login extends React.Component {
                     )}
                   </View>
                   <View>
-                    <TouchableNativeFeedback onPress={handleSubmit}>
+                    <TouchableWithoutFeedback onPress={handleSubmit}>
                       <View style={styles.signupbox}>
                         {this.state.loading ? (
                           <ActivityIndicator color="#fff" />
@@ -164,7 +157,7 @@ export default class Login extends React.Component {
                           <Text style={styles.signuptext}>Login</Text>
                         )}
                       </View>
-                    </TouchableNativeFeedback>
+                    </TouchableWithoutFeedback>
                   </View>
                   <View style={styles.footTextDiv}>
                     <TouchableWithoutFeedback
@@ -263,13 +256,13 @@ const styles = StyleSheet.create({
     fontSize: 36,
     marginBottom: 25,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 43,
   },
   subText: {
     color: '#000000',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     lineHeight: 18,
   },
   signupbox: {
@@ -286,7 +279,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',

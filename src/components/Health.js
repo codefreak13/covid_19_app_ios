@@ -6,7 +6,7 @@ import {
   Picker,
   ScrollView,
   KeyboardAvoidingView,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
@@ -304,7 +304,7 @@ class Health extends React.Component {
                     </View>
                   </View>
                 </View>
-                <TouchableNativeFeedback onPress={handleSubmit}>
+                <TouchableWithoutFeedback onPress={handleSubmit}>
                   <View style={styles.signupbox}>
                     {this.state.loading ? (
                       <ActivityIndicator color="#fff" />
@@ -312,7 +312,7 @@ class Health extends React.Component {
                       <Text style={styles.signuptext}>Next</Text>
                     )}
                   </View>
-                </TouchableNativeFeedback>
+                </TouchableWithoutFeedback>
               </View>
             </ScrollView>
           </KeyboardAvoidingView>
@@ -338,14 +338,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 18,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     marginTop: 6,
     lineHeight: 29,
     textAlign: 'center',
     width: '85%',
   },
   slider: {
-    width: '110%',
+    width: '100%',
   },
   picker: {
     width: '100%',
@@ -373,14 +373,14 @@ const styles = StyleSheet.create({
     color: '#373C3C',
     fontSize: 14,
     lineHeight: 17,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     fontStyle: 'normal',
     fontWeight: '500',
   },
   calendarStyle: {
     fontSize: 14,
     lineHeight: 17,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     fontStyle: 'normal',
     fontWeight: 'normal',
     color: '#979797',
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     color: '#373C3C',
     fontSize: 10,
     lineHeight: 12,
-    fontFamily: 'SF Pro Display',
+    fontFamily: 'Helvetica Neue',
     fontStyle: 'normal',
     fontWeight: 'normal',
   },
