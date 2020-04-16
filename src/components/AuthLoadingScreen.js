@@ -1,8 +1,6 @@
 import React from 'react';
 import {View, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Icon from '../assets/covid.svg';
-import TextIcon from '../assets/covid_text.svg';
 import SplashScreen from 'react-native-splash-screen';
 
 class AuthLoadingScreen extends React.Component {
