@@ -16,7 +16,6 @@ import ShowMessage, {type} from '../toster/ShowMessage';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-community/async-storage';
-import RNPickerSelect from 'react-native-picker-select';
 
 export default class CreateAccount extends React.Component {
   state = {
@@ -118,7 +117,7 @@ export default class CreateAccount extends React.Component {
                     />
                     {touched.name && errors.name && (
                       <Text style={{fontSize: 10, color: 'red'}}>
-                        {errors.name}
+                        {'Please enter a username'}
                       </Text>
                     )}
                   </View>
@@ -135,7 +134,7 @@ export default class CreateAccount extends React.Component {
                     />
                     {touched.email && errors.email && (
                       <Text style={{fontSize: 10, color: 'red'}}>
-                        {errors.email}
+                        {'Please enter a valid email'}
                       </Text>
                     )}
                   </View>
@@ -184,7 +183,7 @@ export default class CreateAccount extends React.Component {
                     </View>
                     {touched.password && errors.password && (
                       <Text style={{fontSize: 10, color: 'red'}}>
-                        {errors.password}
+                        {'Please enter a password'}
                       </Text>
                     )}
                   </View>
@@ -253,10 +252,7 @@ const styles = StyleSheet.create({
     padding: 7,
     paddingHorizontal: 10,
     width: '100%',
-  },
-  input1: {
-    width: '70%',
-    color: 'white',
+    paddingVertical: 20,
   },
   input: {
     color: '#1D1C1C',
@@ -266,6 +262,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     padding: 15,
     width: '100%',
+    paddingVertical: 20,
   },
   inputDiv: {
     marginBottom: 20,

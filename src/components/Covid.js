@@ -14,6 +14,8 @@ import {Formik} from 'formik';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import ShowMessage, {type} from '../toster/ShowMessage';
+import RNPickerSelect from 'react-native-picker-select';
+import Icon from '../assets/downArrow.svg';
 
 class Covid extends React.Component {
   state = {
@@ -100,17 +102,20 @@ class Covid extends React.Component {
                   <Text style={styles.sectionText}>
                     Have you been tested for COVID-19?
                   </Text>
-                  <View style={styles.picker}>
-                    <Picker
-                      onChangeText={handleChange('covid')}
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.covid}
                       onBlur={handleBlur('covid')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('covid', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#323232" />
-                      <Picker.Item label="Yes" value="Yes" color="#323232" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('covid', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                 </View>
                 <TouchableWithoutFeedback onPress={handleSubmit}>
@@ -138,7 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginHorizontal: 30,
-    marginVertical: 46,
+    marginVertical: 50,
   },
   head: {
     color: '#333333',
@@ -193,6 +198,37 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
+    fontStyle: 'normal',
+  },
+  rnPicker: {
+    width: '100%',
+    paddingHorizontal: 20,
+    borderRadius: 4,
+    borderWidth: 0.8,
+    borderColor: '#DADADA',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 14,
+    paddingVertical: 20,
+    paddingRight: 30,
+    lineHeight: 17,
+    fontFamily: 'Helvetica Neue',
+    color: '#323232',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+  },
+  iconContainer: {
+    marginVertical: 25,
+  },
+  placeholder: {
+    color: '#979797',
+    fontSize: 14,
+    lineHeight: 17,
+    fontFamily: 'Helvetica Neue',
+    fontWeight: 'normal',
     fontStyle: 'normal',
   },
 });

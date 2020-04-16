@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginHorizontal: 30,
-    marginVertical: 30,
+    marginVertical: 50,
   },
   head: {
     color: '#333333',

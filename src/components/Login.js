@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     padding: 7,
     paddingHorizontal: 10,
     width: '100%',
+    paddingVertical: 20,
   },
   input1: {
     width: '70%',
@@ -246,6 +247,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     padding: 15,
     width: '100%',
+    paddingVertical: 20,
   },
   inputDiv: {
     marginBottom: 20,

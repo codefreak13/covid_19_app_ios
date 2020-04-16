@@ -1,5 +1,4 @@
 import React from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
   StyleSheet,
   Text,
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     width: '85%',
-    paddingVertical: 50,
+    paddingVertical: 70,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     marginLeft: 27,

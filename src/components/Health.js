@@ -14,6 +14,8 @@ import {Formik} from 'formik';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import ShowMessage, {type} from '../toster/ShowMessage';
+import RNPickerSelect from 'react-native-picker-select';
+import Icon from '../assets/downArrow.svg';
 
 class Health extends React.Component {
   state = {
@@ -114,76 +116,96 @@ class Health extends React.Component {
                     Do you have any pre existing health condition that limits
                     your daily activities?
                   </Text>
-                  <View style={styles.picker}>
-                    <Picker
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.daily}
                       onBlur={handleBlur('daily')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('daily', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#323232" />
-                      <Picker.Item label="Yes" value="Yes" color="#323232" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('daily', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
                     Do you have any heart disease?
                   </Text>
-                  <View style={styles.picker}>
-                    <Picker
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.heart}
                       onBlur={handleBlur('heart')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('heart', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#323232" />
-                      <Picker.Item label="Yes" value="Yes" color="#323232" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('heart', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>Do you have diabetes?</Text>
-                  <View style={styles.picker}>
-                    <Picker
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.diabetes}
                       onBlur={handleBlur('diabetes')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('diabetes', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#323232" />
-                      <Picker.Item label="Yes" value="Yes" color="#323232" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('diabetes', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
                     Do you have any lung disease or asthma?
                   </Text>
-                  <View style={styles.picker}>
-                    <Picker
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.asthma}
                       onBlur={handleBlur('asthma')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('asthma', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#323232" />
-                      <Picker.Item label="Yes" value="Yes" color="#323232" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('asthma', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>Are you a smoker?</Text>
-                  <View style={styles.picker}>
-                    <Picker
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.smoker}
                       onBlur={handleBlur('smoker')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('smoker', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#323232" />
-                      <Picker.Item label="Yes" value="Yes" color="#323232" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('smoker', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                 </View>
                 <View style={styles.section}>
@@ -191,48 +213,60 @@ class Health extends React.Component {
                     Do you undergo chemotherapy, radiotherapy or immunotherapy
                     for cancer?
                   </Text>
-                  <View style={styles.picker}>
-                    <Picker
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.cancer}
                       onBlur={handleBlur('cancer')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('cancer', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#323232" />
-                      <Picker.Item label="Yes" value="Yes" color="#323232" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('cancer', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
                     Are you currently taking immunosuppressant?
                   </Text>
-                  <View style={styles.picker}>
-                    <Picker
+                  <View style={styles.rnPicker}>
+                    <RNPickerSelect
                       selectedValue={values.suppresant}
                       onBlur={handleBlur('suppresant')}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setFieldValue('suppresant', itemValue)
-                      }>
-                      <Picker.Item label="No" value="No" color="#323232" />
-                      <Picker.Item label="Yes" value="Yes" color="#323232" />
-                    </Picker>
+                      onValueChange={(itemValue, itemIndex) => {
+                        setFieldValue('suppresant', itemValue);
+                      }}
+                      Icon={() => {
+                        return <Icon />;
+                      }}
+                      placeholder={{label: 'No', value: 'No'}}
+                      items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                      style={{...pickerSelectStyles}}
+                    />
                   </View>
                   <View style={styles.section}>
                     <Text style={styles.sectionText}>
                       Have you taken antipyretics(e.g Paracetamol , Ibuprofen or
                       Diclofenac) in the past 3 days?
                     </Text>
-                    <View style={styles.picker}>
-                      <Picker
+                    <View style={styles.rnPicker}>
+                      <RNPickerSelect
                         selectedValue={values.ibuprofen}
                         onBlur={handleBlur('ibuprofen')}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setFieldValue('ibuprofen', itemValue)
-                        }>
-                        <Picker.Item label="No" value="No" color="#323232" />
-                        <Picker.Item label="Yes" value="Yes" color="#323232" />
-                      </Picker>
+                        onValueChange={(itemValue, itemIndex) => {
+                          setFieldValue('ibuprofen', itemValue);
+                        }}
+                        Icon={() => {
+                          return <Icon />;
+                        }}
+                        placeholder={{label: 'No', value: 'No'}}
+                        items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                        style={{...pickerSelectStyles}}
+                      />
                     </View>
                   </View>
                   <View style={styles.section}>
@@ -240,16 +274,20 @@ class Health extends React.Component {
                       Are you regularly taking blood pressure medications ending
                       in “-pril”, such as enalapril, ramipril, perindopril?
                     </Text>
-                    <View style={styles.picker}>
-                      <Picker
+                    <View style={styles.rnPicker}>
+                      <RNPickerSelect
                         selectedValue={values.pril}
                         onBlur={handleBlur('pril')}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setFieldValue('pril', itemValue)
-                        }>
-                        <Picker.Item label="No" value="No" color="#323232" />
-                        <Picker.Item label="Yes" value="Yes" color="#323232" />
-                      </Picker>
+                        onValueChange={(itemValue, itemIndex) => {
+                          setFieldValue('pril', itemValue);
+                        }}
+                        Icon={() => {
+                          return <Icon />;
+                        }}
+                        placeholder={{label: 'No', value: 'No'}}
+                        items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                        style={{...pickerSelectStyles}}
+                      />
                     </View>
                   </View>
                   <View style={styles.section}>
@@ -257,16 +295,20 @@ class Health extends React.Component {
                       Do you think you have COVID-19, but you’ve not been
                       tested?
                     </Text>
-                    <View style={styles.picker}>
-                      <Picker
+                    <View style={styles.rnPicker}>
+                      <RNPickerSelect
                         selectedValue={values.covid}
                         onBlur={handleBlur('covid')}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setFieldValue('covid', itemValue)
-                        }>
-                        <Picker.Item label="No" value="No" color="#323232" />
-                        <Picker.Item label="Yes" value="Yes" color="#323232" />
-                      </Picker>
+                        onValueChange={(itemValue, itemIndex) => {
+                          setFieldValue('covid', itemValue);
+                        }}
+                        Icon={() => {
+                          return <Icon />;
+                        }}
+                        placeholder={{label: 'No', value: 'No'}}
+                        items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                        style={{...pickerSelectStyles}}
+                      />
                     </View>
                   </View>
                   <View style={styles.section}>
@@ -274,16 +316,20 @@ class Health extends React.Component {
                       Have you been having the classic symptoms(high grade fever
                       and persistent cough) for the past 3 days or more?
                     </Text>
-                    <View style={styles.picker}>
-                      <Picker
+                    <View style={styles.rnPicker}>
+                      <RNPickerSelect
                         selectedValue={values.cough}
                         onBlur={handleBlur('cough')}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setFieldValue('cough', itemValue)
-                        }>
-                        <Picker.Item label="No" value="No" color="#323232" />
-                        <Picker.Item label="Yes" value="Yes" color="#323232" />
-                      </Picker>
+                        onValueChange={(itemValue, itemIndex) => {
+                          setFieldValue('cough', itemValue);
+                        }}
+                        Icon={() => {
+                          return <Icon />;
+                        }}
+                        placeholder={{label: 'No', value: 'No'}}
+                        items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                        style={{...pickerSelectStyles}}
+                      />
                     </View>
                   </View>
                   <View style={styles.section}>
@@ -291,16 +337,20 @@ class Health extends React.Component {
                       In general, do you have any health condition that requires
                       you to stay at home?
                     </Text>
-                    <View style={styles.picker}>
-                      <Picker
+                    <View style={styles.rnPicker}>
+                      <RNPickerSelect
                         selectedValue={values.home}
                         onBlur={handleBlur('home')}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setFieldValue('home', itemValue)
-                        }>
-                        <Picker.Item label="No" value="No" color="#323232" />
-                        <Picker.Item label="Yes" value="Yes" color="#323232" />
-                      </Picker>
+                        onValueChange={(itemValue, itemIndex) => {
+                          setFieldValue('home', itemValue);
+                        }}
+                        Icon={() => {
+                          return <Icon />;
+                        }}
+                        placeholder={{label: 'No', value: 'No'}}
+                        items={[{label: 'Yes', value: 'Yes', color: '#323232'}]}
+                        style={{...pickerSelectStyles}}
+                      />
                     </View>
                   </View>
                 </View>
@@ -329,7 +379,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginHorizontal: 30,
-    marginVertical: 30,
+    marginVertical: 50,
     justifyContent: 'center',
   },
   head: {
@@ -413,5 +463,36 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica Neue',
     fontStyle: 'normal',
     fontWeight: 'normal',
+  },
+  rnPicker: {
+    width: '100%',
+    paddingHorizontal: 20,
+    borderRadius: 4,
+    borderWidth: 0.8,
+    borderColor: '#DADADA',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 14,
+    paddingVertical: 20,
+    paddingRight: 30,
+    lineHeight: 17,
+    fontFamily: 'Helvetica Neue',
+    color: '#323232',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+  },
+  iconContainer: {
+    marginVertical: 25,
+  },
+  placeholder: {
+    color: '#979797',
+    fontSize: 14,
+    lineHeight: 17,
+    fontFamily: 'Helvetica Neue',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
   },
 });
