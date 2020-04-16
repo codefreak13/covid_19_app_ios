@@ -39,31 +39,31 @@ const AppNavigator = createStackNavigator(
   {initialRouteName: 'Basic'},
 );
 
-// const AppContainer = createAppContainer(AppNavigator);
-// export default AppContainer;
+const AppContainer = createAppContainer(AppNavigator);
+export default AppContainer;
 
-const AuthStack = createStackNavigator(
-  {
-    Login,
-    CreateAccount,
-    ForgotPassword,
-    Splash,
-    Terms,
-  },
-  {
-    initialRouteName: 'Splash',
-  },
-);
+// const AuthStack = createStackNavigator(
+//   {
+//     Login,
+//     CreateAccount,
+//     ForgotPassword,
+//     Splash,
+//     Terms,
+//   },
+//   {
+//     initialRouteName: 'Splash',
+//   },
+// );
 
-export default createAppContainer(
-  createSwitchNavigator(
-    {
-      AuthLoading: AuthLoadingScreen,
-      App: AppNavigator,
-      Auth: AuthStack,
-    },
-    {
-      initialRouteName: 'AuthLoading',
-    },
-  ),
-);
+// export default createAppContainer(
+//   createSwitchNavigator(
+//     {
+//       AuthLoading: AuthLoadingScreen,
+//       App: AppNavigator,
+//       Auth: AuthStack,
+//     },
+//     {
+//       initialRouteName: 'AuthLoading',
+//     },
+//   ),
+// );

@@ -29,7 +29,7 @@ class Covid extends React.Component {
         initialValues={{
           covid: 'No',
         }}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           const token = await AsyncStorage.getItem('token');
           this.setState({loading: true});
           if (values.covid == 'No') {
@@ -54,13 +54,10 @@ class Covid extends React.Component {
             }
           } else {
             try {
-              await firestore()
-                .collection('users')
-                .doc(token)
-                .update({
-                  'covid19_status.has_been_tested_for_COVID19': values.covid,
-                  updated_at: new Date(),
-                });
+              await firestore().collection('users').doc(token).update({
+                'covid19_status.has_been_tested_for_COVID19': values.covid,
+                updated_at: new Date(),
+              });
               this.setState({loading: false});
               this.props.navigation.navigate('Covid2');
             } catch (e) {
@@ -97,7 +94,7 @@ class Covid extends React.Component {
                   minimumValue={0}
                   step={1}
                   value={this.state.sliderValue}
-                  onValueChange={sliderValue => this.setState({sliderValue})}
+                  onValueChange={(sliderValue) => this.setState({sliderValue})}
                 />
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
@@ -111,8 +108,8 @@ class Covid extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('covid', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -164,7 +161,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 0.8,
     borderColor: '#DADADA',
-    color: '#979797',
   },
   section: {
     width: '100%',

@@ -134,12 +134,12 @@ export default class TalkToADoctor extends React.Component {
                           <Picker.Item
                             label="Appointment time"
                             value="Abia"
-                            color="#979797"
+                            color="#323232"
                           />
                           <Picker.Item
                             label="12am"
                             value="12"
-                            color="#979797"
+                            color="#323232"
                           />
                         </Picker>
                       </View>
@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     paddingHorizontal: 19,
     paddingVertical: 16,
+    color: '#323232',
   },
   inputDiv: {
     marginBottom: 20,

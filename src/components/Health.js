@@ -40,44 +40,35 @@ class Health extends React.Component {
           cough: 'No',
           home: 'No',
         }}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           const token = await AsyncStorage.getItem('token');
-          const id = firestore()
-            .collection('healths')
-            .doc().id;
+          const id = firestore().collection('healths').doc().id;
           this.setState({loading: true});
           try {
-            await firestore()
-              .collection('healths')
-              .doc(id)
-              .set({
-                uid: id,
-                userId: token,
-                created_at: new Date(),
-                has_any_health_condition_that_requires_to_stay_at_home:
-                  values.home,
-                has_classic_symptoms_for_the_past_3_days: values.cough,
-                has_diabetes: values.diabetes,
-                has_heart_diesease: values.heart,
-                has_lung_diesease_or_asthma: values.asthma,
-                has_pre_existing_health_conditions: values.daily,
-                has_taken_antipyretics_in_the_past_3_days: values.ibuprofen,
-                has_undergo_chemotherapy_radiotherapy_or_immunotherapy_for_cancer:
-                  values.cancer,
-                is_a_smoker: values.smoker,
-                is_currently_taking_immunosuppressant: values.suppresant,
-                is_taking_blood_pressure_medications_ending_in_pril:
-                  values.pril,
-                think_you_have_COVID19_but_not_been_tested: values.covid,
-              });
+            await firestore().collection('healths').doc(id).set({
+              uid: id,
+              userId: token,
+              created_at: new Date(),
+              has_any_health_condition_that_requires_to_stay_at_home:
+                values.home,
+              has_classic_symptoms_for_the_past_3_days: values.cough,
+              has_diabetes: values.diabetes,
+              has_heart_diesease: values.heart,
+              has_lung_diesease_or_asthma: values.asthma,
+              has_pre_existing_health_conditions: values.daily,
+              has_taken_antipyretics_in_the_past_3_days: values.ibuprofen,
+              has_undergo_chemotherapy_radiotherapy_or_immunotherapy_for_cancer:
+                values.cancer,
+              is_a_smoker: values.smoker,
+              is_currently_taking_immunosuppressant: values.suppresant,
+              is_taking_blood_pressure_medications_ending_in_pril: values.pril,
+              think_you_have_COVID19_but_not_been_tested: values.covid,
+            });
 
-            await firestore()
-              .collection('users')
-              .doc(token)
-              .update({
-                healthId: id,
-                updated_at: new Date(),
-              });
+            await firestore().collection('users').doc(token).update({
+              healthId: id,
+              updated_at: new Date(),
+            });
 
             this.setState({loading: false});
             this.props.navigation.navigate('Covid');
@@ -116,7 +107,7 @@ class Health extends React.Component {
                   minimumValue={0}
                   step={1}
                   value={this.state.sliderValue}
-                  onValueChange={sliderValue => this.setState({sliderValue})}
+                  onValueChange={(sliderValue) => this.setState({sliderValue})}
                 />
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
@@ -130,8 +121,8 @@ class Health extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('daily', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -146,8 +137,8 @@ class Health extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('heart', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -160,8 +151,8 @@ class Health extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('diabetes', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -176,8 +167,8 @@ class Health extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('asthma', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -190,8 +181,8 @@ class Health extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('smoker', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -207,8 +198,8 @@ class Health extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('cancer', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -223,8 +214,8 @@ class Health extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('suppresant', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                   <View style={styles.section}>
@@ -239,8 +230,8 @@ class Health extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('ibuprofen', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -256,8 +247,8 @@ class Health extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('pril', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -273,8 +264,8 @@ class Health extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('covid', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -290,8 +281,8 @@ class Health extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('cough', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -307,8 +298,8 @@ class Health extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('home', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -351,7 +342,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
     lineHeight: 29,
     textAlign: 'center',
-    width: '80%',
+    width: '85%',
   },
   slider: {
     width: '110%',

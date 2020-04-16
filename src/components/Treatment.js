@@ -3,7 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
@@ -147,7 +147,7 @@ class Treatment extends React.Component {
         <Text style={styles.head}>
           What treatment are you receiving or did you receive at the hospital?
         </Text>
-        <TouchableNativeFeedback onPress={this.handleSubmit1}>
+        <TouchableWithoutFeedback onPress={this.handleSubmit1}>
           <View style={[styles.signupbox, {marginBottom: 20}]}>
             {this.state.loading1 ? (
               <ActivityIndicator color="#564FF5" />
@@ -155,9 +155,9 @@ class Treatment extends React.Component {
               <Text style={styles.signuptext}>None</Text>
             )}
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
         <View style={styles.inputDiv}>
-          <TouchableNativeFeedback onPress={this.handleSubmit2}>
+          <TouchableWithoutFeedback onPress={this.handleSubmit2}>
             <View style={styles.signupbox}>
               {this.state.loading2 ? (
                 <ActivityIndicator color="#564FF5" />
@@ -165,14 +165,14 @@ class Treatment extends React.Component {
                 <Text style={styles.signuptext}>Oxygen and fluids</Text>
               )}
             </View>
-          </TouchableNativeFeedback>
+          </TouchableWithoutFeedback>
           <Text style={styles.buttonText}>
             Breathing support administered through an oxygen mask, which pushes
             oxygen into lungs.
           </Text>
         </View>
         <View style={styles.inputDiv}>
-          <TouchableNativeFeedback onPress={this.handleSubmit3}>
+          <TouchableWithoutFeedback onPress={this.handleSubmit3}>
             <View style={styles.signupbox}>
               {this.state.loading3 ? (
                 <ActivityIndicator color="#564FF5" />
@@ -180,14 +180,14 @@ class Treatment extends React.Component {
                 <Text style={styles.signuptext}>Non-invasive ventilation</Text>
               )}
             </View>
-          </TouchableNativeFeedback>
+          </TouchableWithoutFeedback>
           <Text style={styles.buttonText}>
             Breathing support administered through an inserted tube. People are
             usually asleep for this procedure.
           </Text>
         </View>
         <View style={styles.inputDiv}>
-          <TouchableNativeFeedback onPress={this.handleSubmit4}>
+          <TouchableWithoutFeedback onPress={this.handleSubmit4}>
             <View style={styles.signupbox}>
               {this.state.loading4 ? (
                 <ActivityIndicator color="#564FF5" />
@@ -195,13 +195,13 @@ class Treatment extends React.Component {
                 <Text style={styles.signuptext}>Invasive ventilation</Text>
               )}
             </View>
-          </TouchableNativeFeedback>
+          </TouchableWithoutFeedback>
           <Text style={styles.buttonText}>
             Breathing support administered through an oxygen mask, no pressure
             applied.
           </Text>
         </View>
-        <TouchableNativeFeedback onPress={this.handleSubmit5}>
+        <TouchableWithoutFeedback onPress={this.handleSubmit5}>
           <View style={styles.signupbox}>
             {this.state.loading5 ? (
               <ActivityIndicator color="#564FF5" />
@@ -209,7 +209,7 @@ class Treatment extends React.Component {
               <Text style={styles.signuptext}>Other treatment</Text>
             )}
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     lineHeight: 21,
     marginBottom: 42,
     textAlign: 'center',
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     fontStyle: 'normal',
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     lineHeight: 14,
     textAlign: 'center',
     marginTop: 5,
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     color: '#595959',
     fontWeight: 'normal',
     fontSize: 14,
-    fontFamily: 'SF Pro Display',
+    fontFamily:  'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 17,
     fontStyle: 'normal',

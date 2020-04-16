@@ -107,8 +107,8 @@ class Symptoms extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('covid', itemValue)
                       }>
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
-                      <Picker.Item label="No" value="No" color="#979797" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
+                      <Picker.Item label="No" value="No" color="#323232" />
                     </Picker>
                   </View>
                 </View>

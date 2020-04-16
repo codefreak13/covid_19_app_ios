@@ -44,17 +44,53 @@ class Symptoms extends React.Component {
           taste: 'No',
           voice: 'No',
         }}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           const token = await AsyncStorage.getItem('token');
-          const id = firestore()
-            .collection('symptoms')
-            .doc().id;
+
+          const documentSnapshot = await firestore()
+            .collection('users')
+            .doc(token)
+            .get();
+          const symptomsId = documentSnapshot._data.symptomsId;
+
           this.setState({loading: true});
-          try {
-            await firestore()
-              .collection('symptoms')
-              .doc(id)
-              .set({
+          if (symptomsId) {
+            try {
+              await firestore().collection('symptoms').doc(symptomsId).update({
+                uid: symptomsId,
+                userId: token,
+                updated_at: new Date(),
+                has_fever_or_a_high_temperature: values.fever,
+                temperature: values.temperature,
+                temperature_scale: values.tempScale,
+                has_persistent_cough: values.coughEpisodes,
+                is_feeling_unwell_or_experiencing_fatigue: values.fatigue,
+                has_difficulty_breathing: values.breathing,
+                has_sore_throat: values.soreThroat,
+                has_headache: values.headache,
+                has_chest_pain_or_chest_tightness: values.chestPain,
+                has_an_unusual_abdominal_pain: values.abdominalPain,
+                is_experiencing_diarrhoea: values.diarrhoea,
+                is_experiencing_confusion_disorientation_or_drowsiness:
+                  values.drowsiness,
+                has_been_skipping_meals: values.meals,
+                has_loss_of_smell_or_taste: values.taste,
+                has_an_unusually_hoarse_voice: values.voice,
+              });
+
+              this.setState({loading: false});
+              this.props.navigation.navigate('Location');
+            } catch (e) {
+              this.setState({loading: false});
+              let err = e.message.split(' ');
+              err.shift();
+              ShowMessage(type.ERROR, err.join(' '));
+              console.log(err.join(' '));
+            }
+          } else {
+            const id = firestore().collection('symptoms').doc().id;
+            try {
+              await firestore().collection('symptoms').doc(id).set({
                 uid: id,
                 userId: token,
                 created_at: new Date(),
@@ -76,22 +112,20 @@ class Symptoms extends React.Component {
                 has_an_unusually_hoarse_voice: values.voice,
               });
 
-            await firestore()
-              .collection('users')
-              .doc(token)
-              .update({
+              await firestore().collection('users').doc(token).update({
                 symptomsId: id,
                 updated_at: new Date(),
               });
 
-            this.setState({loading: false});
-            this.props.navigation.navigate('Location');
-          } catch (e) {
-            this.setState({loading: false});
-            let err = e.message.split(' ');
-            err.shift();
-            ShowMessage(type.ERROR, err.join(' '));
-            console.log(err.join(' '));
+              this.setState({loading: false});
+              this.props.navigation.navigate('Location');
+            } catch (e) {
+              this.setState({loading: false});
+              let err = e.message.split(' ');
+              err.shift();
+              ShowMessage(type.ERROR, err.join(' '));
+              console.log(err.join(' '));
+            }
           }
         }}>
         {({
@@ -121,7 +155,7 @@ class Symptoms extends React.Component {
                   minimumValue={0}
                   step={1}
                   value={this.state.sliderValue}
-                  onValueChange={sliderValue => this.setState({sliderValue})}
+                  onValueChange={(sliderValue) => this.setState({sliderValue})}
                 />
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
@@ -135,8 +169,8 @@ class Symptoms extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('fever', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -152,7 +186,7 @@ class Symptoms extends React.Component {
                     }}>
                     <View style={styles.tempInput}>
                       <TextInput
-                        keyboardType="default"
+                        keyboardType="number-pad"
                         placeholderTextColor="#979797"
                         value={values.temperature}
                         onChangeText={handleChange('temperature')}
@@ -169,8 +203,8 @@ class Symptoms extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('tempScale', itemValue)
                         }>
-                        <Picker.Item label="C" value="No" color="#979797" />
-                        <Picker.Item label="F" value="Yes" color="#979797" />
+                        <Picker.Item label="C" value="No" color="#323232" />
+                        <Picker.Item label="F" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -188,8 +222,8 @@ class Symptoms extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('coughEpisodes', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -205,8 +239,8 @@ class Symptoms extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('fatigue', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -222,8 +256,8 @@ class Symptoms extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('breathing', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -239,8 +273,8 @@ class Symptoms extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('soreThroat', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -254,8 +288,8 @@ class Symptoms extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('headache', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                 </View>
@@ -271,8 +305,8 @@ class Symptoms extends React.Component {
                       onValueChange={(itemValue, itemIndex) =>
                         setFieldValue('chestPain', itemValue)
                       }>
-                      <Picker.Item label="No" value="No" color="#979797" />
-                      <Picker.Item label="Yes" value="Yes" color="#979797" />
+                      <Picker.Item label="No" value="No" color="#323232" />
+                      <Picker.Item label="Yes" value="Yes" color="#323232" />
                     </Picker>
                   </View>
                   <View style={styles.section}>
@@ -287,8 +321,8 @@ class Symptoms extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('abdominalPain', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -304,8 +338,8 @@ class Symptoms extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('diarrhoea', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -322,8 +356,8 @@ class Symptoms extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('drowsiness', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -339,8 +373,8 @@ class Symptoms extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('meals', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -356,8 +390,8 @@ class Symptoms extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('taste', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -373,8 +407,8 @@ class Symptoms extends React.Component {
                         onValueChange={(itemValue, itemIndex) =>
                           setFieldValue('voice', itemValue)
                         }>
-                        <Picker.Item label="No" value="No" color="#979797" />
-                        <Picker.Item label="Yes" value="Yes" color="#979797" />
+                        <Picker.Item label="No" value="No" color="#323232" />
+                        <Picker.Item label="Yes" value="Yes" color="#323232" />
                       </Picker>
                     </View>
                   </View>
@@ -428,14 +462,12 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 0.8,
     borderColor: '#DADADA',
-    color: '#979797',
   },
   picker1: {
     width: '25%',
     borderRadius: 4,
     borderWidth: 0.8,
     borderColor: '#DADADA',
-    color: '#979797',
   },
   tempInput: {
     width: '72%',
@@ -443,7 +475,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 0.8,
     borderColor: '#DADADA',
-    color: '#979797',
+    color: '#323232',
   },
   section: {
     width: '100%',
@@ -465,7 +497,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SF Pro Display',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    color: '#979797',
+    color: '#323232',
   },
   signupbox: {
     backgroundColor: '#564FF5',
