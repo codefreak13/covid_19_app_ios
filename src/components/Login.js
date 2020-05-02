@@ -97,6 +97,7 @@ export default class Login extends React.Component {
                   }}>
                   <View style={styles.inputDiv}>
                     <TextInput
+                      style={{height: 50}}
                       keyboardType="email-address"
                       style={styles.input}
                       placeholderTextColor="#979797"
@@ -115,6 +116,7 @@ export default class Login extends React.Component {
                   <View style={styles.inputDiv}>
                     <View style={styles.passwordMenu}>
                       <TextInput
+                        style={{height: 50}}
                         keyboardType="default"
                         style={{width: '90%'}}
                         placeholderTextColor="#979797"
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
     padding: 7,
     paddingHorizontal: 10,
     width: '100%',
-    paddingVertical: 20,
+    paddingVertical: 5,
   },
   input1: {
     width: '70%',

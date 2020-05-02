@@ -191,6 +191,7 @@ class Symptoms extends React.Component {
                     }}>
                     <View style={styles.tempInput}>
                       <TextInput
+                        style={{height: 50}}
                         keyboardType="number-pad"
                         placeholderTextColor="#979797"
                         value={values.temperature}
@@ -521,7 +522,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     borderColor: '#DADADA',
     color: '#323232',
-    paddingVertical: 20,
+    paddingVertical: 5,
   },
   section: {
     width: '100%',

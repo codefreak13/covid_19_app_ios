@@ -85,6 +85,7 @@ export default class TalkToADoctor extends React.Component {
                   <View>
                     <View style={styles.inputDiv}>
                       <TextInput
+                        style={{height: 50}}
                         keyboardType="email-address"
                         style={styles.input}
                         placeholderTextColor="#979797"
@@ -104,6 +105,7 @@ export default class TalkToADoctor extends React.Component {
                     </View>
                     <View style={styles.inputDiv}>
                       <TextInput
+                        style={{height: 50}}
                         keyboardType="number-pad"
                         style={styles.input}
                         placeholderTextColor="#979797"
@@ -152,6 +154,7 @@ export default class TalkToADoctor extends React.Component {
                     </View>
                     <View style={styles.input}>
                       <TextInput
+                        style={{height: 50}}
                         placeholder="Enter reason for appointment"
                         keyboardType="default"
                         placeholderTextColor="#979797"

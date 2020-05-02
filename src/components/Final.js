@@ -40,7 +40,7 @@ class Final extends React.Component {
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
-          onPress={() => Linking.openURL('https://www.Aeglehealth.io')}>
+          onPress={() => Linking.openURL('https://booking.aeglehealth.io/')}>
           <View style={styles.signupbox1}>
             <Text style={styles.signuptext1}>Talk to a doctor</Text>
           </View>

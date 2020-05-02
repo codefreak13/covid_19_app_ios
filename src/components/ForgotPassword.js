@@ -83,6 +83,7 @@ export default class ForgotPassword extends React.Component {
                   }}>
                   <View style={styles.inputDiv}>
                     <TextInput
+                      style={{height: 50}}
                       keyboardType="email-address"
                       style={styles.input}
                       placeholderTextColor="#979797"
