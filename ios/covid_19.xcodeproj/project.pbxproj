@@ -20,7 +20,7 @@
 		58319BC4C9A50CA8546C0634 /* libPods-covid_19Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1ADE2F2E38B5BFA306CC44 /* libPods-covid_19Tests.a */; };
 		8C2B621B8CB3864F25AAE3C4 /* libPods-covid_19-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E888483FD10D650E449B50B /* libPods-covid_19-tvOS.a */; };
 		B99CB08014032C5377DBB50D /* libPods-covid_19-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CA808B4A5B17C035461C4C /* libPods-covid_19-tvOSTests.a */; };
-		CE3071242448A65D0051EC1E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE3071232448A65D0051EC1E /* GoogleService-Info.plist */; };
+		CE6D73C5245CC54000399706 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE6D73C4245CC54000399706 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,7 +80,8 @@
 		AC758874BF6E4A08A33389ED /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		B45036A1C7034B8FACF057B5 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		BF1ADE2F2E38B5BFA306CC44 /* libPods-covid_19Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-covid_19Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE3071232448A65D0051EC1E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CE6D73C4245CC54000399706 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CEE3FDDF24524B7A00ECB514 /* covid_19Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = covid_19Release.entitlements; path = covid_19/covid_19Release.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EEDB635097B441E797F51E1C /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
@@ -158,7 +159,7 @@
 		13B07FAE1A68108700A75B9A /* covid_19 */ = {
 			isa = PBXGroup;
 			children = (
-				CE3071232448A65D0051EC1E /* GoogleService-Info.plist */,
+				CEE3FDDF24524B7A00ECB514 /* covid_19Release.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -193,6 +194,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CE6D73C4245CC54000399706 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* covid_19 */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* covid_19Tests */,
@@ -338,6 +340,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = W272MZSBQM;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -385,7 +388,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				CE3071242448A65D0051EC1E /* GoogleService-Info.plist in Resources */,
+				CE6D73C5245CC54000399706 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -734,7 +737,9 @@
 			baseConfigurationReference = 3FB85AE2221610D14A121D27 /* Pods-covid_19.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 2;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = W272MZSBQM;
 				INFOPLIST_FILE = covid_19/Info.plist;
@@ -747,6 +752,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.covid-19-symptom-tracker.teamgrace";
 				PRODUCT_NAME = covid_19;
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.covid-19-symptom-tracker.teamgrace";
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -757,7 +763,10 @@
 			baseConfigurationReference = 6F58BAC3CBFEB5888F3D906D /* Pods-covid_19.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 2;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = W272MZSBQM;
 				INFOPLIST_FILE = covid_19/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -769,6 +778,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.covid-19-symptom-tracker.teamgrace";
 				PRODUCT_NAME = covid_19;
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.covid-19-symptom-tracker.teamgrace";
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
