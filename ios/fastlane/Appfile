@@ -1,0 +1,8 @@
+app_identifier("com.covid-19-symptom-tracker.teamgrace") # The bundle identifier of your app
+apple_id("Vinovestige@yahoo.com") # Your Apple email address
+
+itc_team_id("121398106") # App Store Connect Team ID
+team_id("W272MZSBQM") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
