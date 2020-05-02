@@ -29,7 +29,7 @@ class Treatment extends React.Component {
         initialValues={{
           optional: '',
         }}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           const token = await AsyncStorage.getItem('token');
           this.setState({loading: true});
           try {
@@ -80,7 +80,7 @@ class Treatment extends React.Component {
                   minimumValue={0}
                   step={1}
                   value={this.state.sliderValue}
-                  onValueChange={sliderValue => this.setState({sliderValue})}
+                  onValueChange={(sliderValue) => this.setState({sliderValue})}
                 />
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
@@ -88,6 +88,7 @@ class Treatment extends React.Component {
                   </Text>
                   <View style={styles.picker}>
                     <TextInput
+                      style={{height: 50}}
                       placeholder="Optional"
                       keyboardType="default"
                       placeholderTextColor="#979797"
@@ -97,7 +98,11 @@ class Treatment extends React.Component {
                       name="optional"
                       multiline={true}
                       numberOfLines={20}
-                      style={{textAlignVertical: 'top',minHeight: 150, height: 'auto'}}
+                      style={{
+                        textAlignVertical: 'top',
+                        minHeight: 150,
+                        height: 'auto',
+                      }}
                     />
                   </View>
                 </View>
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 18,
     fontStyle: 'normal',
-    fontFamily:  'Helvetica Neue',
+    fontFamily: 'Helvetica Neue',
     marginTop: 6,
     lineHeight: 29,
     textAlign: 'center',
@@ -162,7 +167,7 @@ const styles = StyleSheet.create({
     color: '#373C3C',
     fontSize: 14,
     lineHeight: 17,
-    fontFamily:  'Helvetica Neue',
+    fontFamily: 'Helvetica Neue',
     fontStyle: 'normal',
     fontWeight: '500',
   },
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 15,
-    fontFamily:  'Helvetica Neue',
+    fontFamily: 'Helvetica Neue',
     alignSelf: 'center',
     lineHeight: 18,
     fontStyle: 'normal',

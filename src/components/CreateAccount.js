@@ -106,6 +106,7 @@ export default class CreateAccount extends React.Component {
                   }}>
                   <View style={styles.inputDiv}>
                     <TextInput
+                      style={{height: 50}}
                       keyboardType="default"
                       style={styles.input}
                       placeholderTextColor="#979797"
@@ -123,6 +124,7 @@ export default class CreateAccount extends React.Component {
                   </View>
                   <View style={styles.inputDiv}>
                     <TextInput
+                      style={{height: 50}}
                       keyboardType="email-address"
                       style={styles.input}
                       placeholderTextColor="#979797"
@@ -140,6 +142,7 @@ export default class CreateAccount extends React.Component {
                   </View>
                   <View style={styles.inputDiv}>
                     <TextInput
+                      style={{height: 50}}
                       keyboardType="number-pad"
                       style={styles.input}
                       placeholderTextColor="#979797"
@@ -153,6 +156,7 @@ export default class CreateAccount extends React.Component {
                   <View style={styles.inputDiv}>
                     <View style={styles.passwordMenu}>
                       <TextInput
+                        style={{height: 50}}
                         keyboardType="default"
                         placeholderTextColor="#979797"
                         value={values.password}
@@ -252,7 +256,7 @@ const styles = StyleSheet.create({
     padding: 7,
     paddingHorizontal: 10,
     width: '100%',
-    paddingVertical: 20,
+    paddingVertical: 5,
   },
   input: {
     color: '#1D1C1C',

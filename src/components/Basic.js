@@ -179,6 +179,7 @@ class Basic extends React.Component {
               <Text style={[styles.sectionText]}>Weight</Text>
               <View style={styles.picker}>
                 <TextInput
+                  style={{height: 50}}
                   keyboardType="number-pad"
                   placeholderTextColor="#979797"
                   value={this.state.weight}
@@ -198,6 +199,7 @@ class Basic extends React.Component {
                 <View style={{width: '48%'}}>
                   <View style={styles.picker1}>
                     <TextInput
+                      style={{height: 50}}
                       keyboardType="number-pad"
                       placeholderTextColor="#979797"
                       value={this.state.feet}
@@ -210,6 +212,7 @@ class Basic extends React.Component {
                 <View style={{width: '48%'}}>
                   <View style={styles.picker1}>
                     <TextInput
+                      style={{height: 50}}
                       keyboardType="number-pad"
                       placeholderTextColor="#979797"
                       value={this.state.inches}
@@ -291,6 +294,7 @@ class Basic extends React.Component {
               <Text style={styles.sectionText}>City</Text>
               <View style={styles.picker}>
                 <TextInput
+                  style={{height: 50}}
                   keyboardType="default"
                   placeholderTextColor="#979797"
                   value={this.state.city}
@@ -362,7 +366,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     borderColor: '#DADADA',
     color: '#323232',
-    paddingVertical: 18,
+    paddingVertical: 5,
   },
   picker1: {
     width: '100%',
@@ -371,7 +375,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     borderColor: '#DADADA',
     color: '#323232',
-    paddingVertical: 18,
+    paddingVertical: 5,
   },
   section: {
     width: '100%',
